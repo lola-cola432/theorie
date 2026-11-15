@@ -16,16 +16,18 @@ window.TOPICS.push({
       text: {
         nl: ['Een <b>bestuurder</b> is iedereen in het verkeer, <b>behalve een voetganger</b>.',
              'Auto, fiets, brommer, scooter, motor en tram: allemaal bestuurders.',
+             'Ook een <b>ruiter</b> op een paard is een bestuurder. En iemand die met een paard aan de hand loopt ook.',
              '<b>Voorrang</b> geldt alleen tussen bestuurders.'],
         en: ['In Dutch traffic law, a <b>driver</b> is every road user <b>except a pedestrian</b>.',
              'Car, bicycle, moped, scooter, motorbike and tram: all of them count as drivers. So a cyclist is a driver too.',
+             'A <b>horse rider</b> is a driver as well. So is someone leading a horse by hand.',
              '<b>Right of way</b> only applies between drivers.']
       },
       why: {
         nl: 'Bij elke voorrangsvraag kijk je eerst: is de ander een bestuurder? Is het een voetganger? Dan gaat het niet over voorrang, maar over "voor laten gaan".',
         en: 'With every right-of-way question, first check: is the other person a driver? If it is a pedestrian, it is not about right of way, but about letting them go first.'
       },
-      terms: ['bestuurder', 'voetganger'],
+      terms: ['bestuurder', 'voetganger', 'ruiter'],
       src: 'RVV 1990, art. 1'
     },
     {
@@ -145,10 +147,10 @@ window.TOPICS.push({
       title: { nl: 'Borden: jij geeft voorrang', en: 'Signs: you give way' },
       text: {
         nl: ['<b>B6</b> (driehoek op zijn punt): geef voorrang aan bestuurders op de kruisende weg. Komt er niemand? Dan mag je doorrijden.',
-             '<b>B7</b> (STOP): je moet <b>altijd stoppen</b>. Daarna geef je voorrang.',
+             '<b>B7</b> (STOP): je moet <b>altijd stoppen</b>, vóór de stopstreep. Daarna geef je voorrang.',
              '<b>Haaientanden</b> op de weg betekenen hetzelfde als B6. De punten wijzen naar jou.'],
         en: ['<b>B6</b> (triangle pointing down): give way to drivers on the crossing road. Nobody coming? Then you may drive on.',
-             '<b>B7</b> (STOP): you must <b>always stop</b>. Then you give way.',
+             '<b>B7</b> (STOP): you must <b>always stop</b>, before the stop line. Then you give way.',
              '<b>Shark\'s teeth</b> (white triangles) on the road mean the same as B6. The points face you.']
       },
       why: {
@@ -156,7 +158,7 @@ window.TOPICS.push({
         en: 'At busy or unclear junctions "right goes first" is not safe enough. Then the road authority uses signs to decide who has to wait.'
       },
       terms: ['haaientanden', 'voorrang verlenen'],
-      src: 'RVV 1990, bijlage 1 (B6, B7) en art. 80'
+      src: 'RVV 1990, bijlage 1 (B6, B7), art. 79 en 80'
     },
     {
       id: 'c9', scene: { arms: 'NESW', bikepath: 1, actors: [{ t: 'car', p: 'S', m: 'right', me: 1 }, { t: 'bike', p: 'SB', m: 'straight' }] },
@@ -201,9 +203,11 @@ window.TOPICS.push({
       title: { nl: 'Het zebrapad', en: 'The zebra crossing' },
       text: {
         nl: ['Staat een voetganger op het zebrapad, of loopt hij het op?',
-             'Dan laat je hem <b>voor gaan</b>.'],
+             'Dan laat je hem <b>voor gaan</b>.',
+             'Dat geldt ook voor iemand in een scootmobiel of rolstoel die daar oversteekt.'],
         en: ['Is a pedestrian on the zebra crossing, or stepping onto it?',
-             'Then you <b>let them go first</b>.']
+             'Then you <b>let them go first</b>.',
+             'The same goes for someone in a mobility scooter or wheelchair crossing there.']
       },
       why: {
         nl: 'Een voetganger heeft geen bescherming. Het zebrapad is de plek waar hij veilig moet kunnen oversteken.',
@@ -250,7 +254,7 @@ window.TOPICS.push({
         en: 'A person sees what is happening right now. A light responds to traffic. A sign is always there. A rule is the basis. The more "live", the higher it ranks.'
       },
       terms: ['aanwijzingen', 'verkeerslichten'],
-      src: 'RVV 1990, art. 82 en de rangorde van verkeerstekens'
+      src: 'RVV 1990, art. 63, 64 en 84'
     }
   ],
 

@@ -13,7 +13,7 @@ window.TOPICS.push({
       ['With <b>main beam</b> you see further. But you dazzle others.', 'You may not use it: during the day, when you meet someone coming towards you, or when you are driving close behind someone.'],
       'Wie verblind wordt, ziet een paar seconden bijna niets. In die tijd rijdt hij tientallen meters blind.',
       'Someone who is dazzled sees almost nothing for a few seconds. In that time they travel tens of metres blind.',
-      ['grootlicht', 'verblinden'], 'RVV 1990, art. 33'),
+      ['grootlicht', 'verblinden'], 'RVV 1990, art. 32'),
     C('v3', 'Mistachterlicht', 'Rear fog light',
       ['Het <b>mistachterlicht</b> mag alleen aan bij <b>mist of sneeuwval</b>, als je <b>minder dan 50 meter</b> ver kunt zien.', 'Bij regen mag het <b>niet</b> aan.'],
       ['The <b>rear fog light</b> may only be on in <b>fog or snowfall</b>, when you can see <b>less than 50 metres</b>.', 'In rain it may <b>not</b> be on.'],
@@ -43,7 +43,13 @@ window.TOPICS.push({
       ['As the driver you are responsible for the condition of your car.', 'Check regularly: dipped headlights, brake lights, indicators and rear lights.', 'Keep the lamps and windows clean.'],
       'Een kapot remlicht zie je zelf niet. Maar de bestuurder achter je ziet dan niet dat je remt.',
       'You cannot see a broken brake light yourself. But the driver behind you then cannot see that you are braking.',
-      ['remlicht', 'verlichting'], 'Wegenverkeerswet 1994, art. 5 en Regeling voertuigen')
+      ['remlicht', 'verlichting'], 'Wegenverkeerswet 1994, art. 5 en Regeling voertuigen'),
+    C('v8', 'Stilstaan in het donker', 'Standing still in the dark',
+      ['Sta je <b>buiten de bebouwde kom</b> in het donker stil op de rijbaan, een vluchtstrook of een parkeerhaven?', 'Dan moeten je <b>stadslicht en achterlicht</b> aan.'],
+      ['Are you stationary in the dark <b>outside a built-up area</b> on the carriageway, a hard shoulder or a lay-by?', 'Then your <b>sidelights and rear lights</b> must be on.'],
+      'Buiten de bebouwde kom is er vaak geen straatverlichting en rijdt het verkeer hard. Een donkere auto zie je dan pas op het laatste moment.',
+      'Outside built-up areas there is often no street lighting and traffic is fast. You only see a dark car at the last moment.',
+      ['stadslicht', 'achterlicht'], 'RVV 1990, art. 38')
   ],
   questions: [
     Q('vq1', 'v1', 'Het is overdag en erg mistig. Welk licht zet je aan?', 'It is daytime and very foggy. Which lights do you switch on?', [['Dimlicht', 'Dipped headlights'], ['Geen licht, het is dag', 'No lights, it is daytime']], 0, 'Bij slecht zicht gebruik je ook overdag dimlicht.', 'In poor visibility you use dipped headlights during the day too.'),
@@ -55,6 +61,7 @@ window.TOPICS.push({
     Q('vq7', 'v5', 'De auto voor je trekt bij groen licht niet op. Mag je toeteren?', 'The car in front does not move off at the green light. May you sound your horn?', [['Nee', 'No'], ['Ja', 'Yes']], 0, 'Toeteren mag alleen om gevaar af te wenden. Dit is geen gevaar.', 'Sounding your horn is only allowed to avert danger. This is not danger.'),
     Q('vq8', 'v5', 'Een kind rent tussen geparkeerde auto\'s de weg op. Mag je toeteren?', 'A child runs into the road from between parked cars. May you sound your horn?', [['Ja', 'Yes'], ['Nee', 'No']], 0, 'Dit is dreigend gevaar. Dan mag je een geluidssignaal geven. En natuurlijk rem je.', 'This is imminent danger. Then you may sound your horn. And of course you brake.'),
     Q('vq9', 'v6', 'Je rijdt op de snelweg en ziet plotseling een file. Je moet hard remmen. Mag je je alarmlichten aanzetten?', 'You are on the motorway and suddenly see a traffic jam. You have to brake hard. May you switch on your hazard lights?', [['Ja, om het verkeer achter mij te waarschuwen', 'Yes, to warn the traffic behind me'], ['Nee, alleen bij pech', 'No, only in a breakdown']], 0, 'Alarmlichten mag je gebruiken om anderen te waarschuwen voor gevaar.', 'You may use hazard lights to warn others of danger.'),
+    Q('vq11', 'v8', 'Het is nacht. Je staat buiten de bebouwde kom stil op de vluchtstrook. Welke lichten moeten aan?', 'It is night. You are stationary on the hard shoulder outside a built-up area. Which lights must be on?', [['Stadslicht en achterlicht', 'Sidelights and rear lights'], ['Geen, ik sta stil', 'None, I am stationary'], ['Grootlicht', 'Main beam']], 0, 'Buiten de bebouwde kom moet een stilstaande auto in het donker stadslicht en achterlicht voeren.', 'Outside built-up areas a stationary car must show sidelights and rear lights in the dark.'),
     Q('vq10', 'v6', 'Je wilt even een pakje afgeven en zet de auto op de stoep met de alarmlichten aan. Mag dat?', 'You want to drop off a parcel quickly and put the car on the pavement with the hazard lights on. Is that allowed?', [['Nee', 'No'], ['Ja', 'Yes']], 0, 'Alarmlichten maken fout parkeren niet goed. Op de stoep parkeren mag niet.', 'Hazard lights do not make wrong parking right. Parking on the pavement is not allowed.')
   ]
 });
