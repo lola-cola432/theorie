@@ -9,13 +9,11 @@ window.TOPICS.push({
       'If everyone keeps right, the left stays free for overtaking. That makes it clear where everyone drives.',
       ['rechts houden'], 'RVV 1990, art. 3'),
     C('p2', 'Inhalen doe je links', 'You overtake on the left',
-      ['<b>Inhalen doe je links.</b>', 'Rechts inhalen mag bij iemand die links heeft voorgesorteerd en richting naar links aangeeft.', 'Een tram mag je rechts inhalen.',
-       'Staat er <b>file</b>? Dan mag je de file op de strook links van je ook rechts voorbijrijden.', 'Kijk eerst: is de weg ver genoeg vrij, en haalt niemand jou al in?'],
-      ['<b>You overtake on the left.</b>', 'Overtaking on the right is allowed when someone has moved to the left to turn left and is indicating left.', 'You may overtake a tram on the right.',
-       'Is there a <b>traffic queue</b>? Then you may also pass the queue in the lane to your left on the right.', 'Check first: is the road clear far enough ahead, and is nobody already overtaking you?'],
+      ['<b>Inhalen doe je links.</b>', 'Rechts inhalen mag bij iemand die links heeft voorgesorteerd en richting naar links aangeeft.', 'Een tram mag je rechts inhalen.', 'Kijk eerst: is de weg ver genoeg vrij, en haalt niemand jou al in?'],
+      ['<b>You overtake on the left.</b>', 'Overtaking on the right is allowed when someone has moved to the left to turn left and is indicating left.', 'You may overtake a tram on the right.', 'Check first: is the road clear far enough ahead, and is nobody already overtaking you?'],
       'Een bestuurder verwacht inhalers aan zijn linkerkant. Daar kijkt hij ook naar. Rechts ben je voor hem onverwacht.',
       'A driver expects to be overtaken on the left. That is also where they look. On the right you are unexpected.',
-      ['inhalen', 'voorsorteren', 'file'], 'RVV 1990, art. 11 en 13'),
+      ['inhalen', 'voorsorteren'], 'RVV 1990, art. 11'),
     C('p3', 'Hier mag je niet inhalen', 'Where you may not overtake',
       ['Vlak voor of op een <b>zebrapad</b>.', 'Bij bord <b>F1</b> (inhaalverbod).', 'Als je daarvoor over een <b>doorgetrokken streep</b> moet.', 'Als je de weg niet ver genoeg kunt overzien, zoals voor een bocht of heuvel.'],
       ['Just before or on a <b>zebra crossing</b>.', 'At sign <b>F1</b> (no overtaking).', 'If you would have to cross a <b>solid line</b>.', 'If you cannot see far enough ahead, as before a bend or hill.'],
@@ -27,7 +25,7 @@ window.TOPICS.push({
       ['You indicate when you: drive off, turn, overtake, change lanes, or join and leave a road.', 'In short: with every sideways movement.', 'Do it in good time. Look first, then indicate, and only then steer.'],
       'Je knipperlicht is je manier om te praten met anderen. Zonder knipperlicht moeten ze raden wat je gaat doen.',
       'Your indicator is how you talk to others. Without it they have to guess what you will do.',
-      ['richting aangeven', 'richtingaanwijzer'], 'RVV 1990, art. 17 en 55'),
+      ['richting aangeven', 'richtingaanwijzer'], 'RVV 1990, art. 17'),
     C('p5', 'Voorsorteren', 'Getting in position to turn',
       ['Ga je <b>rechtsaf</b>? Ga op tijd zoveel mogelijk rechts rijden.', 'Ga je <b>linksaf</b>? Ga zoveel mogelijk naar links, tegen het midden van de weg.', 'In een straat met eenrichtingsverkeer ga je voor linksaf helemaal links rijden.'],
       ['Turning <b>right</b>? Move as far right as possible in good time.', 'Turning <b>left</b>? Move as far left as possible, towards the middle of the road.', 'In a one-way street you move all the way to the left to turn left.'],
@@ -64,7 +62,6 @@ window.TOPICS.push({
     Q('pq8', 'p6', 'Je staat geparkeerd en wilt wegrijden. Er komt een fietser van achteren. Wie gaat eerst?', 'You are parked and want to drive off. A cyclist comes from behind. Who goes first?', [['De fietser', 'The cyclist'], ['Ik', 'Me']], 0, 'Wegrijden is een bijzondere manoeuvre. Je laat al het andere verkeer voor gaan.', 'Driving off is a special manoeuvre. You let all other traffic go first.'),
     Q('pq9', 'p6', 'Je voegt in op de snelweg. Wie moet wachten?', 'You are joining the motorway. Who has to wait?', [['Ik, het verkeer op de snelweg gaat voor', 'Me, traffic on the motorway goes first'], ['Het verkeer op de snelweg', 'Traffic on the motorway']], 0, 'Invoegen is een bijzondere manoeuvre. Het verkeer op de doorgaande rijbaan gaat voor.', 'Joining is a special manoeuvre. Traffic on the main carriageway goes first.'),
     Q('pq10', 'p7', 'Je licht is groen. Aan de overkant van het kruispunt staat file. Wat doe je?', 'Your light is green. Traffic is queuing on the far side of the junction. What do you do?', [['Ik wacht voor het kruispunt', 'I wait before the junction'], ['Ik rijd het kruispunt op', 'I drive onto the junction']], 0, 'Je mag het kruispunt niet blokkeren. Rijd pas op als je er ook af kunt.', 'You may not block the junction. Only drive on when you can also get off it.'),
-    Q('pq12', 'p2', 'Het is file op de snelweg. De linkerstrook staat stil, jouw strook rijdt langzaam door. Mag je de auto\'s links van je voorbijrijden?', 'There is a traffic jam on the motorway. The left lane is standing still, your lane is moving slowly. May you pass the cars on your left?', [['Ja', 'Yes'], ['Nee, rechts inhalen mag nooit', 'No, overtaking on the right is never allowed']], 0, 'In een file mag je de file links van je rechts voorbijrijden.', 'In a traffic jam you may pass the queue to your left on the right.'),
     Q('pq11', 'p8', 'Je verlaat de rotonde. Wat doe je?', 'You are leaving the roundabout. What do you do?', [['Ik geef richting aan naar rechts', 'I indicate right'], ['Ik geef geen richting aan', 'I do not indicate']], 0, 'Bij het verlaten van de rotonde sla je af. Dan geef je richting aan naar rechts.', 'Leaving the roundabout is a turn. So you indicate right.')
   ]
 });
