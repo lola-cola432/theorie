@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Theorie Stap voor Stap</title>
+<meta name="theme-color" content="#2b4c7e">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{
+    --bg:#fbf6ea; --card:#fffdf7; --ink:#1f1f1f; --soft:#5a5a5a; --line:#e4dccb;
+    --accent:#2b4c7e; --accent-ink:#fff; --good:#1f7a3a; --good-bg:#e3f3e6; --bad:#a3361f; --bad-bg:#fbe6df;
+    --chip:#efe7d4; --fs:20px;
+  }
+  body.wit{ --bg:#ffffff; --card:#f7f7f7; --line:#e2e2e2; --chip:#ededed; }
+  body.donker{ --bg:#1d1f23; --card:#272a30; --ink:#f0ece2; --soft:#b9b4a8; --line:#3a3e46; --accent:#8fb3ec; --accent-ink:#111;
+    --good:#7fd197; --good-bg:#1f3427; --bad:#f19a85; --bad-bg:#3d2520; --chip:#343842; }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--ink); font-family: Verdana, Tahoma, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size:var(--fs); line-height:1.6; letter-spacing:.02em; word-spacing:.08em; -webkit-text-size-adjust:100%;}
+  b{font-weight:700}
+  .wrap{max-width:640px; margin:0 auto; padding:12px 16px 120px}
+  header{position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:2px solid var(--line)}
+  .bar{max-width:640px; margin:0 auto; display:flex; align-items:center; gap:8px; padding:8px 12px}
+  .bar h1{font-size:1rem; margin:0; flex:1; line-height:1.25}
+  .icon-btn{min-width:48px; min-height:48px; border-radius:12px; border:2px solid var(--line); background:var(--card); color:var(--ink);
+    font-size:1rem; font-family:inherit; cursor:pointer; padding:0 10px}
+  .lang{display:flex; border:2px solid var(--accent); border-radius:12px; overflow:hidden}
+  .lang button{min-height:44px; min-width:52px; border:0; background:transparent; color:var(--accent); font:700 .9rem Verdana,sans-serif; cursor:pointer}
+  .lang button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink)}
+  h2{font-size:1.35rem; line-height:1.3; margin:18px 0 10px}
+  h3{font-size:1.1rem; margin:0 0 8px; line-height:1.35}
+  p{margin:0 0 12px; max-width:34em}
+  .card{background:var(--card); border:2px solid var(--line); border-radius:18px; padding:18px; margin:14px 0}
+  .steps{display:grid; gap:12px}
+  .step{display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:var(--card); color:var(--ink);
+    border:2px solid var(--line); border-radius:16px; padding:14px 16px; font:inherit; cursor:pointer; min-height:72px}
+  .step .num{flex:none; width:46px; height:46px; border-radius:50%; background:var(--accent); color:var(--accent-ink); display:grid; place-items:center; font-weight:700; font-size:1.1rem}
+  .step .t{flex:1}
+  .step .t small{display:block; color:var(--soft); font-size:.85rem; line-height:1.4}
+  .prog{height:10px; border-radius:6px; background:var(--chip); overflow:hidden; margin-top:6px}
+  .prog i{display:block; height:100%; background:var(--good); width:0}
+  ul.lines{list-style:none; padding:0; margin:0 0 6px}
+  ul.lines li{padding:8px 0 8px 0; border-bottom:1px dashed var(--line)}
+  ul.lines li:last-child{border-bottom:0}
+  .scene{background:#fff; border-radius:14px; overflow:hidden; border:2px solid var(--line); margin:4px 0 14px}
+  .scene svg{display:block; width:100%; height:auto}
+  .why{background:var(--chip); border-radius:14px; padding:12px 14px; margin:12px 0}
+  .why h4{margin:0 0 4px; font-size:1rem}
+  .src{font-size:.8rem; color:var(--soft); margin-top:10px}
+  .terms{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 4px}
+  .term{background:var(--chip); border-radius:10px; padding:4px 10px; font-size:.85rem}
+  .term span{color:var(--soft)}
+  .row{display:flex; gap:10px; margin-top:14px}
+  .btn{flex:1; min-height:58px; border-radius:14px; border:2px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+    font:700 1rem Verdana,sans-serif; cursor:pointer; padding:8px 12px}
+  .btn.ghost{background:transparent; color:var(--accent)}
+  .btn:disabled{opacity:.4}
+  .say{display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0 14px; border-radius:12px; border:2px solid var(--line);
+    background:var(--card); color:var(--ink); font:700 .9rem Verdana,sans-serif; cursor:pointer}
+  .say.on{border-color:var(--accent)}
+  .opts{display:grid; gap:12px; margin-top:12px}
+  .opt{min-height:64px; text-align:left; padding:12px 16px; border-radius:14px; border:3px solid var(--line); background:var(--card); color:var(--ink);
+    font:inherit; cursor:pointer}
+  .opt.good{border-color:var(--good); background:var(--good-bg)}
+  .opt.bad{border-color:var(--bad); background:var(--bad-bg)}
+  .verdict{font-weight:700; font-size:1.1rem; margin:14px 0 4px}
+  .verdict.good{color:var(--good)} .verdict.bad{color:var(--bad)}
+  .counter{color:var(--soft); font-size:.9rem}
+  .signrow{display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-start; margin:4px 0 12px}
+  .sg{margin:0; text-align:center; background:#fff; border:2px solid var(--line); border-radius:12px; padding:6px 6px 2px; color:#1f1f1f}
+  .sg figcaption{font-size:.8rem; font-weight:700}
+  .ladder-q{font-size:1.15rem; font-weight:700}
+  .done-badge{display:inline-block; background:var(--good-bg); color:var(--good); border-radius:10px; padding:2px 10px; font-size:.85rem; font-weight:700}
+  dialog{border:0; border-radius:18px; padding:0; width:min(92vw,520px); background:var(--card); color:var(--ink)}
+  dialog::backdrop{background:rgba(0,0,0,.45)}
+  .dlg{padding:18px}
+  .seg{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 16px}
+  .seg button{min-height:48px; padding:0 14px; border-radius:12px; border:2px solid var(--line); background:var(--bg); color:var(--ink); font:700 .9rem Verdana,sans-serif; cursor:pointer}
+  .seg button[aria-pressed="true"]{border-color:var(--accent); outline:2px solid var(--accent)}
+  .hint{color:var(--soft); font-size:.9rem}
+  .fade{animation:f .25s ease}
+  @keyframes f{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion: reduce){ .fade{animation:none} }
+  :focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <button class="icon-btn" id="homeBtn" aria-label="Home">⌂</button>
+    <h1 id="appTitle">Theorie Stap voor Stap</h1>
+    <div class="lang" role="group" aria-label="Taal / Language">
+      <button id="lnNL" aria-pressed="true">NL</button>
+      <button id="lnEN" aria-pressed="false">EN</button>
+    </div>
+    <button class="icon-btn" id="setBtn" aria-label="Instellingen">Aa</button>
+  </div>
+</header>
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+
+<script src="content.js"></script>
+<script src="scene.js"></script>
+<script>
+(function(){
+  const T = window.TOPIC;
+  const UI = {
+    nl:{ title:'Theorie Stap voor Stap', me:'JIJ', aria:'Tekening van de verkeerssituatie',
+      intro:'Je leert in 3 stappen. Eerst de <b>feiten</b>. Dan het <b>waarom</b>. Dan <b>oefenen</b>. Neem de tijd. Er is geen tijdsdruk.',
+      s1:'Weten', s1d:'De regels, kort en duidelijk', s2:'Begrijpen', s2d:'Waarom is het zo? De voorrangsladder', s3:'Toepassen', s3d:'Oefenvragen met uitleg',
+      read:'Lees voor', stop:'Stop', next:'Volgende', prev:'Vorige', got:'Ik snap het', why:'Waarom?', src:'Bron', exam:'Examenwoord',
+      card:'Kaartje', of:'van', back:'Terug', ladder:'De voorrangsladder', ladderD:'Loop de vragen van boven naar beneden af. Bij het eerste "ja" weet je het antwoord.',
+      yes:'Ja', no:'Nee', again:'Opnieuw', whyCards:'Waarom-kaartjes', whyCardsD:'Lees het waarom. Probeer het daarna zelf uit te leggen.',
+      explain:'Leg het in je eigen woorden uit. Zeg het hardop, of aan je maatje.', showEx:'Laat mijn uitleg zien',
+      start:'Start oefenen', q:'Vraag', good:'Goed!', bad:'Niet goed. Geen probleem, deze komt nog een keer terug.',
+      rule:'Lees de regel', result:'Klaar!', score:'goed', more:'Nog een ronde', home:'Naar het begin', weak:'Vragen die je nog lastig vond komen vaker terug.',
+      settings:'Instellingen', size:'Lettergrootte', theme:'Achtergrond', cream:'Crème', white:'Wit', dark:'Donker', speech:'Voorlezen',
+      auto:'Automatisch voorlezen', off:'Uit', on:'Aan', speed:'Snelheid voorlezen', slow:'Rustig', normal:'Normaal', close:'Sluiten', reset:'Voortgang wissen',
+      resetQ:'Weet je het zeker? Alle voortgang wordt gewist.', noVoice:'Op dit toestel is geen voorleesstem gevonden.',
+      done:'gedaan', topic:'Onderwerp', how:'Hoe werkt het?' },
+    en:{ title:'Theory Step by Step', me:'YOU', aria:'Drawing of the traffic situation',
+      intro:'You learn in 3 steps. First the <b>facts</b>. Then the <b>why</b>. Then <b>practice</b>. Take your time. There is no time pressure.',
+      s1:'Know', s1d:'The rules, short and clear', s2:'Understand', s2d:'Why is it like this? The right-of-way ladder', s3:'Apply', s3d:'Practice questions with explanations',
+      read:'Read aloud', stop:'Stop', next:'Next', prev:'Back', got:'I get it', why:'Why?', src:'Source', exam:'Dutch exam word',
+      card:'Card', of:'of', back:'Back', ladder:'The right-of-way ladder', ladderD:'Go through the questions from top to bottom. At the first "yes" you have your answer.',
+      yes:'Yes', no:'No', again:'Again', whyCards:'"Why" cards', whyCardsD:'Read the why. Then try to explain it yourself.',
+      explain:'Explain it in your own words. Say it out loud, or to your study buddy.', showEx:'Show my explanation',
+      start:'Start practising', q:'Question', good:'Correct!', bad:'Not quite. No problem, this one will come back.',
+      rule:'Read the rule', result:'Done!', score:'correct', more:'Another round', home:'Back to start', weak:'Questions you found hard come back more often.',
+      settings:'Settings', size:'Text size', theme:'Background', cream:'Cream', white:'White', dark:'Dark', speech:'Read aloud',
+      auto:'Read aloud automatically', off:'Off', on:'On', speed:'Reading speed', slow:'Calm', normal:'Normal', close:'Close', reset:'Clear progress',
+      resetQ:'Are you sure? All progress will be cleared.', noVoice:'No reading voice was found on this device.',
+      done:'done', topic:'Topic', how:'How does it work?' }
+  };
+
+  /* ---------- opslag ---------- */
+  const KEY = 'tsbs_v1';
+  let S = { lang:'nl', fs:20, theme:'', auto:false, rate:0.9, cards:{}, why:{}, ladder:false, q:{} };
+  try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e){}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
+
+  const $ = s => document.querySelector(s);
+  const app = $('#app');
+  const L = () => UI[S.lang];
+  const tx = o => o[S.lang];
+  const plain = h => h.replace(/<[^>]+>/g,'').replace(/[▽⌂]/g,'');
+
+  /* ---------- voorlezen ---------- */
+  const synth = window.speechSynthesis;
+  function voiceFor(lang){
+    if (!synth) return null;
+    const vs = synth.getVoices(); const want = lang === 'nl' ? 'nl' : 'en';
+    return vs.find(v => v.lang.toLowerCase().startsWith(want === 'nl' ? 'nl-nl' : 'en-us')) || vs.find(v => v.lang.toLowerCase().startsWith(want)) || null;
+  }
+  function speak(text, btn){
+    if (!synth) { alertBox(L().noVoice); return; }
+    synth.cancel();
+    document.querySelectorAll('.say.on').forEach(b => { b.classList.remove('on'); b.innerHTML = '🔊 ' + L().read; });
+    const u = new SpeechSynthesisUtterance(plain(text));
+    u.lang = S.lang === 'nl' ? 'nl-NL' : 'en-US';
+    const v = voiceFor(S.lang); if (v) u.voice = v;
+    u.rate = S.rate;
+    if (btn){ btn.classList.add('on'); btn.innerHTML = '⏹ ' + L().stop;
+      u.onend = u.onerror = () => { btn.classList.remove('on'); btn.innerHTML = '🔊 ' + L().read; }; }
+    synth.speak(u);
+  }
+  if (synth) synth.onvoiceschanged = () => {};
+  function sayBtn(text){
+    const b = document.createElement('button'); b.className = 'say'; b.innerHTML = '🔊 ' + L().read;
+    b.onclick = () => { if (b.classList.contains('on')) { synth && synth.cancel(); b.classList.remove('on'); b.innerHTML = '🔊 ' + L().read; } else speak(text, b); };
+    return b;
+  }
+  function autoSay(text){ if (S.auto && synth) setTimeout(() => speak(text), 250); }
+  function alertBox(msg){ openDlg(`<p>${msg}</p><div class="row"><button class="btn" data-close>${L().close}</button></div>`); }
+
+  /* ---------- helpers ---------- */
+  function h(html){ const d = document.createElement('div'); d.innerHTML = html; return d; }
+  function screen(nodes){
+    if (synth) synth.cancel();
+    app.innerHTML = ''; const w = document.createElement('div'); w.className = 'fade';
+    nodes.forEach(n => w.appendChild(typeof n === 'string' ? h(n) : n)); app.appendChild(w); window.scrollTo(0,0);
+  }
+  function termChips(c){
+    if (S.lang !== 'en' || !c.terms) return '';
+    return `<div class="terms">${c.terms.map(t => `<span class="term"><span>${L().exam}:</span> <b>${t}</b></span>`).join('')}</div>`;
+  }
+  function visual(c){
+    if (c.scene) return `<div class="scene">${drawScene(c.scene, L())}</div>`;
+    if (c.icon === 'signsHave') return drawSignRow(['B1','B2','B3','B4','B5']);
+    if (c.icon === 'signsGive') return drawSignRow(['B6','B7','H']);
+    return '';
+  }
+  const pct = (a,b) => b ? Math.round(a/b*100) : 0;
+  function stats(){
+    const c = T.cards.filter(x => S.cards[x.id]).length;
+    const w = T.cards.filter(x => S.why[x.id]).length + (S.ladder ? 1 : 0);
+    const q = T.questions.filter(x => S.q[x.id] && S.q[x.id].ok > 0).length;
+    return { c, cn:T.cards.length, w, wn:T.cards.length+1, q, qn:T.questions.length };
+  }
+
+  /* ---------- home ---------- */
+  function home(){
+    const l = L(), st = stats();
+    const steps = document.createElement('div'); steps.className = 'steps';
+    [[1,l.s1,l.s1d,pct(st.c,st.cn),weten],[2,l.s2,l.s2d,pct(st.w,st.wn),begrijpen],[3,l.s3,l.s3d,pct(st.q,st.qn),toepassen]].forEach(([n,t,d,p,fn]) => {
+      const b = document.createElement('button'); b.className = 'step';
+      b.innerHTML = `<span class="num">${n}</span><span class="t"><b>${t}</b><small>${d}</small><span class="prog" aria-hidden="true"><i style="width:${p}%"></i></span></span><span aria-hidden="true">›</span>`;
+      b.setAttribute('aria-label', `${n}. ${t}. ${d}. ${p}% ${l.done}`);
+      b.onclick = () => fn(0); steps.appendChild(b);
+    });
+    const intro = h(`<h2>${l.topic}: ${tx(T.title)}</h2><p>${l.intro}</p>`);
+    const sb = sayBtn(l.intro);
+    screen([intro, sb, steps]);
+    autoSay(l.intro);
+  }
+
+  /* ---------- 1. Weten ---------- */
+  function weten(i){
+    const l = L(), c = T.cards[i], n = T.cards.length;
+    const lines = tx(c.text);
+    const body = h(`<div class="counter">${l.card} ${i+1} ${l.of} ${n} ${S.cards[c.id] ? '· <span class="done-badge">✓</span>' : ''}</div>
+      <div class="card"><h3>${tx(c.title)}</h3>${visual(c)}
+      <ul class="lines">${lines.map(x => `<li>${x}</li>`).join('')}</ul>${termChips(c)}
+      <div class="src">${l.src}: ${c.src}</div></div>`);
+    const speakText = tx(c.title) + '. ' + lines.join(' ');
+    const sb = sayBtn(speakText);
+    const row = document.createElement('div'); row.className = 'row';
+    const prev = mk('btn ghost', l.prev, () => weten(i-1)); prev.disabled = i === 0;
+    const got = mk('btn', (i < n-1 ? l.got + ' ›' : l.got + ' ✓'), () => { S.cards[c.id] = 1; save(); i < n-1 ? weten(i+1) : home(); });
+    row.append(prev, got);
+    screen([body, sb, row]);
+    autoSay(speakText);
+  }
+  function mk(cls, label, fn){ const b = document.createElement('button'); b.className = cls; b.innerHTML = label; b.onclick = fn; return b; }
+
+  /* ---------- 2. Begrijpen ---------- */
+  function begrijpen(){
+    const l = L();
+    const st = document.createElement('div'); st.className = 'steps';
+    const a = document.createElement('button'); a.className = 'step';
+    a.innerHTML = `<span class="num">A</span><span class="t"><b>${l.ladder}</b><small>${l.ladderD}</small></span>${S.ladder ? '<span class="done-badge">✓</span>' : '›'}`;
+    a.onclick = () => ladder(0);
+    const b = document.createElement('button'); b.className = 'step';
+    const w = T.cards.filter(x => S.why[x.id]).length;
+    b.innerHTML = `<span class="num">B</span><span class="t"><b>${l.whyCards}</b><small>${l.whyCardsD}</small><span class="prog"><i style="width:${pct(w,T.cards.length)}%"></i></span></span>›`;
+    b.onclick = () => whyCard(0);
+    st.append(a, b);
+    screen([h(`<h2>2. ${l.s2}</h2>`), st]);
+  }
+  function ladder(i){
+    const l = L();
+    const head = h(`<h2>${l.ladder}</h2><p class="hint">${l.ladderD}</p>`);
+    const list = document.createElement('div');
+    T.ladder.forEach((r, k) => {
+      if (k > i) return;
+      const cur = k === i;
+      const c = h(`<div class="card"${cur ? '' : ' style="opacity:.55"'}><div class="counter">${k+1} / ${T.ladder.length}</div><div class="ladder-q">${tx(r.q)}</div>${cur ? '' : `<p class="hint">${l.no}</p>`}</div>`).firstChild;
+      if (cur){
+        const row = document.createElement('div'); row.className = 'row';
+        row.append(mk('btn', l.yes, () => ladderAnswer(i)), mk('btn ghost', l.no, () => i+1 < T.ladder.length ? ladder(i+1) : ladderAnswer(-1)));
+        c.appendChild(sayBtn(tx(r.q))); c.appendChild(row);
+      }
+      list.appendChild(c);
+    });
+    screen([head, list]);
+    autoSay(tx(T.ladder[i].q));
+  }
+  function ladderAnswer(i){
+    const l = L();
+    const ans = i < 0 ? tx(T.ladderEnd) : tx(T.ladder[i].yes);
+    const card = i < 0 ? T.cards.find(x => x.id === 'c4') : T.cards.find(x => x.id === T.ladder[i].card);
+    S.ladder = true; save();
+    const box = h(`<h2>${l.ladder}</h2>${i >= 0 ? `<div class="card" style="opacity:.6"><div class="ladder-q">${tx(T.ladder[i].q)}</div><p class="hint">${l.yes}</p></div>` : ''}
+      <div class="card" style="border-color:var(--good)"><div class="ladder-q">→ ${ans}</div>
+      <div class="why"><h4>${l.why}</h4>${tx(card.why)}</div><div class="src">${l.src}: ${card.src}</div></div>`);
+    const row = document.createElement('div'); row.className = 'row';
+    row.append(mk('btn ghost', l.back, begrijpen), mk('btn', l.again, () => ladder(0)));
+    screen([box, sayBtn(ans + ' ' + tx(card.why)), row]);
+    autoSay(ans);
+  }
+  function whyCard(i){
+    const l = L(), c = T.cards[i], n = T.cards.length;
+    const body = h(`<div class="counter">${l.card} ${i+1} ${l.of} ${n} ${S.why[c.id] ? '· <span class="done-badge">✓</span>' : ''}</div>
+      <div class="card"><h3>${tx(c.title)}</h3>${visual(c)}
+      <div class="why"><h4>${l.why}</h4>${tx(c.why)}</div>
+      <p><b>${l.explain}</b></p><div id="ex"></div></div>`);
+    const ex = body.querySelector('#ex');
+    const show = mk('btn ghost', l.showEx, () => { ex.innerHTML = `<ul class="lines">${tx(c.text).map(x => `<li>${x}</li>`).join('')}</ul>${termChips(c)}<div class="src">${l.src}: ${c.src}</div>`; show.remove(); });
+    ex.appendChild(show);
+    const row = document.createElement('div'); row.className = 'row';
+    const prev = mk('btn ghost', l.prev, () => whyCard(i-1)); prev.disabled = i === 0;
+    row.append(prev, mk('btn', i < n-1 ? l.got + ' ›' : l.got + ' ✓', () => { S.why[c.id] = 1; save(); i < n-1 ? whyCard(i+1) : begrijpen(); }));
+    screen([body, sayBtn(tx(c.title) + '. ' + tx(c.why)), row]);
+    autoSay(tx(c.title) + '. ' + tx(c.why));
+  }
+
+  /* ---------- 3. Toepassen ---------- */
+  let ses = null;
+  function toepassen(){
+    const l = L();
+    screen([h(`<h2>3. ${l.s3}</h2><p>${S.lang==='nl' ? 'Je krijgt 10 vragen. Na elke vraag zie je waarom het antwoord klopt.' : 'You get 10 questions. After each one you see why the answer is right.'}</p><p class="hint">${l.weak}</p>`),
+      (()=>{ const r = document.createElement('div'); r.className='row'; r.appendChild(mk('btn', l.start, startSession)); return r; })()]);
+  }
+  function startSession(){
+    // zwakke vragen eerst, dan nieuwe, dan de rest
+    const score = q => { const s = S.q[q.id]; if (!s) return 1; return s.bad*2 - s.ok + (s.last === 0 ? 3 : 0); };
+    const pool = T.questions.slice().sort((a,b) => (score(b) - score(a)) || (Math.random() - .5));
+    ses = { list: pool.slice(0, 10), i: 0, ok: 0, total: 0, retried: {} };
+    question();
+  }
+  function question(){
+    const l = L(), q = ses.list[ses.i];
+    const body = h(`<div class="counter">${l.q} ${ses.i+1} ${l.of} ${ses.list.length}</div>
+      <div class="card"><div class="scene">${drawScene(q.scene, L())}</div><h3>${tx(q.q)}</h3><div class="opts"></div><div id="fb"></div></div>`);
+    const opts = body.querySelector('.opts'), fb = body.querySelector('#fb');
+    q.o.forEach((o, k) => {
+      const b = mk('opt', tx(o), () => answer(k));
+      opts.appendChild(b);
+    });
+    function answer(k){
+      const ok = k === q.a;
+      opts.querySelectorAll('.opt').forEach((b, j) => { b.disabled = true; if (j === q.a) b.classList.add('good'); else if (j === k) b.classList.add('bad'); });
+      const s = S.q[q.id] || { ok:0, bad:0, last:null };
+      ok ? s.ok++ : s.bad++; s.last = ok ? 1 : 0; S.q[q.id] = s; save();
+      if (!ses.retried[q.id]) { ses.total++; if (ok) ses.ok++; }
+      if (!ok && !ses.retried[q.id]) { ses.retried[q.id] = 1; ses.list.splice(Math.min(ses.i + 3, ses.list.length), 0, q); }
+      const card = T.cards.find(c => c.id === q.card);
+      fb.innerHTML = `<div class="verdict ${ok?'good':'bad'}">${ok ? '✓ ' + l.good : '✗ ' + l.bad}</div>
+        <div class="why"><h4>${l.why}</h4>${tx(q.why)}</div><div class="src">${l.src}: ${card.src}</div>`;
+      const row = document.createElement('div'); row.className = 'row';
+      row.append(mk('btn ghost', l.rule, () => openDlg(`<h3>${tx(card.title)}</h3>${visual(card)}<ul class="lines">${tx(card.text).map(x=>`<li>${x}</li>`).join('')}</ul>${termChips(card)}<div class="row"><button class="btn" data-close>${l.close}</button></div>`)),
+                 mk('btn', l.next + ' ›', () => { ses.i++; ses.i < ses.list.length ? question() : result(); }));
+      fb.appendChild(sayBtn((ok ? l.good : l.bad) + ' ' + tx(q.why)));
+      fb.appendChild(row);
+      autoSay((ok ? l.good : l.bad) + ' ' + tx(q.why));
+      fb.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+    const sb = sayBtn(tx(q.q) + ' ' + q.o.map((o,k) => (k+1) + '. ' + tx(o)).join('. '));
+    body.querySelector('.card').insertBefore(sb, opts);
+    screen([body]);
+    autoSay(tx(q.q));
+  }
+  function result(){
+    const l = L();
+    const msg = `${ses.ok} / ${ses.total} ${l.score}`;
+    const row = document.createElement('div'); row.className = 'row';
+    row.append(mk('btn ghost', l.home, home), mk('btn', l.more, startSession));
+    screen([h(`<h2>${l.result}</h2><div class="card"><p style="font-size:1.6rem;font-weight:700;margin:0">${msg}</p><p class="hint" style="margin-top:8px">${l.weak}</p></div>`), row]);
+    autoSay(l.result + ' ' + msg);
+  }
+
+  /* ---------- instellingen ---------- */
+  const dlg = $('#dlg');
+  function openDlg(html){ $('#dlgBody').innerHTML = html; dlg.showModal(); dlg.querySelectorAll('[data-close]').forEach(b => b.onclick = () => dlg.close()); }
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  function settings(){
+    const l = L();
+    const seg = (key, items) => `<div class="seg">${items.map(([v,t]) => `<button data-k="${key}" data-v="${v}" aria-pressed="${String(S[key])===String(v)}">${t}</button>`).join('')}</div>`;
+    openDlg(`<h3>${l.settings}</h3>
+      <div>${l.size}</div>${seg('fs', [[18,'A'],[20,'A+'],[23,'A++'],[26,'A+++']])}
+      <div>${l.theme}</div>${seg('theme', [['',l.cream],['wit',l.white],['donker',l.dark]])}
+      <div>${l.auto}</div>${seg('auto', [[false,l.off],[true,l.on]])}
+      <div>${l.speed}</div>${seg('rate', [[0.8,l.slow],[0.9,l.normal],[1,'+']])}
+      <div class="row"><button class="btn ghost" id="rst">${l.reset}</button><button class="btn" data-close>${l.close}</button></div>`);
+    dlg.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+      const k = b.dataset.k; let v = b.dataset.v;
+      if (k === 'fs' || k === 'rate') v = Number(v); if (k === 'auto') v = v === 'true';
+      S[k] = v; save(); applyLook(); settings();
+    });
+    $('#rst').onclick = () => { if (confirmReset()) { S.cards = {}; S.why = {}; S.ladder = false; S.q = {}; save(); dlg.close(); home(); } };
+  }
+  function confirmReset(){ return window.confirm(L().resetQ); }
+  function applyLook(){
+    document.documentElement.style.setProperty('--fs', S.fs + 'px');
+    document.body.className = S.theme || '';
+    document.documentElement.lang = S.lang;
+    $('#appTitle').textContent = L().title;
+    $('#lnNL').setAttribute('aria-pressed', S.lang === 'nl'); $('#lnEN').setAttribute('aria-pressed', S.lang === 'en');
+    $('#setBtn').setAttribute('aria-label', L().settings);
+  }
+
+  /* taal wisselen: zelfde scherm opnieuw tekenen */
+  let redraw = home;
+  const wrapNav = fn => function(){ const args = arguments; redraw = () => fn.apply(null, args); return fn.apply(null, args); };
+  // registreer schermen zodat taalwissel op hetzelfde scherm blijft
+  const _w = weten, _b = begrijpen, _l = ladder, _wc = whyCard, _t = toepassen, _h = home, _la = ladderAnswer, _r = result;
+  weten = wrapNav(_w); begrijpen = wrapNav(_b); ladder = wrapNav(_l); whyCard = wrapNav(_wc); toepassen = wrapNav(_t); home = wrapNav(_h); ladderAnswer = wrapNav(_la); result = wrapNav(_r);
+  const _q = question; question = function(){ redraw = () => _q(); return _q(); };
+  function setLang(lg){ S.lang = lg; save(); applyLook(); redraw(); }
+  $('#lnNL').onclick = () => setLang('nl');
+  $('#lnEN').onclick = () => setLang('en');
+  $('#homeBtn').onclick = () => home();
+  $('#setBtn').onclick = settings;
+
+  applyLook(); home();
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
