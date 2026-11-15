@@ -17,6 +17,10 @@
       exNote:'De vragen zijn zelf gemaakt in examenstijl. Het zijn niet de echte CBR-vragen.', ex30:'Start: 30 minuten', ex45:'Start: 45 minuten (extra tijd)',
       exLeft:'Tijd over', exStop:'Examen stoppen', exStopQ:'Wil je het examen stoppen? Je krijgt dan meteen de uitslag.', exPass:'Geslaagd!', exFail:'Nog niet geslaagd',
       exNeed:'Je hebt 44 goed nodig.', exPer:'Per onderwerp', exWrong:'Bekijk je fouten', exNone:'Geen fouten. Knap gedaan!', yours:'Jouw antwoord', right:'Goed antwoord', noAns:'geen antwoord', exBest:'Beste score',
+      hMulti:'Er kunnen meer antwoorden goed zijn. Tik alle goede antwoorden aan.', hNum:'Typ het getal.', hSpot:'Tik in de tekening het goede antwoord aan.', hOrder:'Tik ze aan in de goede volgorde. Begin met wie als eerste mag.',
+      check:'Controleer', redo:'Opnieuw tikken', rightIs:'Het goede antwoord', meName:'Ik', n_car:'De blauwe auto', n_tram:'De tram', n_bike:'De fietser', n_ped:'De voetganger', n_amb:'De ambulance',
+      secToday:'Vandaag herhalen', revBtn:'Vandaag herhalen', revN:'vragen staan klaar', revNone:'Je bent bij voor vandaag. Goed bezig!', revD:'Vragen die je eerder maakte komen op het goede moment terug.', revTitle:'Herhalen',
+      secLearn:'Leren', secTest:'Toetsen', sgTitle:'Bordentrainer', sgD:'Borden snel leren herkennen', sgIntro:'Je krijgt 10 borden. Soms kies je de betekenis, soms tik je het goede bord aan.', sgQ1:'Wat betekent dit bord?', sgQ2:'Welk bord betekent:', cards:'kaartjes', qs:'vragen',
       jokeAnna:'Doe dit voor je examen: maak een vuist met je hand en maak voor je hoofd een draaiende beweging. Klaar! Nu slaag je sowieso.', jokeJan:'Rock out! With your cock! Out!' },
     en:{ title:'Theory Step by Step', me:'YOU', aria:'Drawing of the traffic situation',
       welcome:'Choose a topic', intro:'You learn each topic in 3 steps. First the <b>facts</b>. Then the <b>why</b>. Then <b>practice</b>. Take your time. There is no time pressure.',
@@ -34,12 +38,16 @@
       exNote:'The questions are our own, written in exam style. They are not the real CBR questions.', ex30:'Start: 30 minutes', ex45:'Start: 45 minutes (extra time)',
       exLeft:'Time left', exStop:'Stop exam', exStopQ:'Do you want to stop the exam? You will get your result straight away.', exPass:'Passed!', exFail:'Not passed yet',
       exNeed:'You need 44 correct.', exPer:'Per topic', exWrong:'Review your mistakes', exNone:'No mistakes. Well done!', yours:'Your answer', right:'Correct answer', noAns:'no answer', exBest:'Best score',
+      hMulti:'More than one answer can be right. Tap all the correct answers.', hNum:'Type the number.', hSpot:'Tap the correct answer in the drawing.', hOrder:'Tap them in the right order. Start with who goes first.',
+      check:'Check', redo:'Tap again', rightIs:'The correct answer', meName:'Me', n_car:'The blue car', n_tram:'The tram', n_bike:'The cyclist', n_ped:'The pedestrian', n_amb:'The ambulance',
+      secToday:'Review today', revBtn:'Review today', revN:'questions are ready', revNone:'You are up to date for today. Well done!', revD:'Questions you answered before come back at the right moment.', revTitle:'Review',
+      secLearn:'Learn', secTest:'Test', sgTitle:'Sign trainer', sgD:'Learn to recognise signs quickly', sgIntro:'You get 10 signs. Sometimes you choose the meaning, sometimes you tap the correct sign.', sgQ1:'What does this sign mean?', sgQ2:'Which sign means:', cards:'cards', qs:'questions',
       jokeAnna:'Do this before your exam: make a fist and make a turning movement in front of your head. Done! Now you will pass for sure.', jokeJan:'Rock out! With your cock! Out!' }
   };
 
   /* ---------- opslag ---------- */
   const KEY = 'tsbs_v1';
-  let S = { lang:'nl', fs:20, theme:'', auto:false, rate:0.9, cards:{}, why:{}, ladder:false, q:{}, best:null };
+  let S = { lang:'nl', fs:20, theme:'', auto:false, rate:0.9, cards:{}, why:{}, ladder:false, q:{}, sg:{}, best:null };
   try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e){}
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
 
@@ -50,6 +58,132 @@
   const plain = h => h.replace(/<[^>]+>/g,'').replace(/[▽⌂›✓✗→]/g,'');
   const shuffle = a => { a = a.slice(); for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; };
   const findCard = id => { for (const t of TOPICS) { const c = t.cards.find(x => x.id === id); if (c) return c; } };
+
+  const ALLQ = () => TOPICS.flatMap(t => t.questions);
+  /* ---------- slim herhalen: goed = later terug (1, 3, 7, 14 dagen), fout = morgen terug ---------- */
+  const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset()*60000) / 86400000);
+  const STEPS = [1, 3, 7, 14];
+  function record(q, ok){
+    if (q.gen) { const g = S.sg[q.code] || { ok:0, bad:0 }; ok ? g.ok++ : g.bad++; S.sg[q.code] = g; save(); return; }
+    const s = S.q[q.id] || { ok:0, bad:0, last:null, box:0 };
+    if (ok) { s.ok++; s.box = Math.min((s.box || 0) + 1, 4); s.due = today() + STEPS[s.box - 1]; }
+    else { s.bad++; s.box = 0; s.due = today() + 1; }
+    s.last = ok ? 1 : 0; S.q[q.id] = s; save();
+  }
+  function dueList(){ const d = today(); return ALLQ().filter(q => { const s = S.q[q.id]; return s && (s.due !== undefined ? s.due <= d : s.last === 0); }); }
+
+  /* ---------- vraagvormen ---------- */
+  const actName = a => a.me ? L().meName : L()['n_' + a.t];
+  const numVal = v => parseFloat(String(v).replace(',', '.'));
+  const numTxt = n => String(n).replace('.', S.lang === 'nl' ? ',' : '.');
+  const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
+  function isRight(q, ans){
+    if (ans === null || ans === undefined) return false;
+    if (q.type === 'num') return numVal(ans) === q.n;
+    if (q.type === 'multi') return same(ans.slice().sort(), q.a.slice().sort());
+    if (q.type === 'order') return same(ans, q.order);
+    return ans === q.a;
+  }
+  function isComplete(q, ans){
+    if (ans === null || ans === undefined) return false;
+    if (q.type === 'num') return ans !== '' && !isNaN(numVal(ans));
+    if (q.type === 'multi') return ans.length > 0;
+    if (q.type === 'order') return ans.length === q.scene.actors.length;
+    return true;
+  }
+  function ansText(q, ans){
+    if (ans === null || ans === undefined || (Array.isArray(ans) && !ans.length) || ans === '') return L().noAns;
+    const opt = k => q.o[k].sign ? q.o[k].sign.split(':')[0] : tx(q.o[k]);
+    if (q.type === 'num') return ans + ' ' + tx(q.unit);
+    if (q.type === 'multi') return ans.slice().sort().map(opt).join(' + ');
+    if (q.type === 'order') return ans.map((i, n) => (n+1) + '. ' + actName(q.scene.actors[i])).join(' · ');
+    if (q.type === 'spot') return actName(q.scene.actors[ans]);
+    return opt(ans);
+  }
+  const rightAns = q => q.type === 'num' ? numTxt(q.n) : q.type === 'order' ? q.order : q.a;
+  function hint(q){ const l = L(); return q.type === 'multi' ? l.hMulti : q.type === 'num' ? l.hNum : q.type === 'spot' ? l.hSpot : q.type === 'order' ? l.hOrder : ''; }
+  function newItem(q){ return { q, order: q.o ? shuffle(q.o.map((_, k) => k)) : null, ans: null }; }
+  function sayText(it){ const q = it.q; return tx(q.q) + ' ' + hint(q) + ' ' + (q.o && !q.o[0].sign ? it.order.map((k, n) => (n+1) + '. ' + tx(q.o[k])).join('. ') : ''); }
+
+  /* Tekent één vraag. onChange(direct) wordt geroepen als het antwoord verandert. */
+  function widget(it, onChange){
+    const q = it.q, type = q.type || 'mc', el = document.createElement('div');
+    let locked = false;
+    const GOOD = '#1f7a3a', BAD = '#a3361f', SEL = '#2b4c7e';
+    const sceneBox = document.createElement('div');
+    function drawSc(){
+      if (!q.scene) return;
+      let marks = {};
+      if (type === 'spot') {
+        if (locked) { marks[q.a] = { c: GOOD, t: '✓' }; if (it.ans !== null && it.ans !== q.a) marks[it.ans] = { c: BAD, t: '✗' }; }
+        else if (it.ans !== null) marks[it.ans] = { c: SEL, t: '✓' };
+      } else if (type === 'order') {
+        if (locked) q.order.forEach((i, n) => marks[i] = { c: GOOD, t: String(n+1) });
+        else (it.ans || []).forEach((i, n) => marks[i] = { c: SEL, t: String(n+1) });
+      }
+      const tap = !locked && (type === 'spot' || type === 'order');
+      sceneBox.className = 'scene'; sceneBox.innerHTML = drawScene(q.scene, Object.assign({}, L(), { tap, marks }));
+      if (tap) sceneBox.querySelectorAll('.act').forEach(g => g.addEventListener('click', () => {
+        const i = +g.dataset.i;
+        if (type === 'spot') { it.ans = i; drawSc(); onChange(true); }
+        else { it.ans = it.ans || []; if (!it.ans.includes(i)) { it.ans.push(i); drawSc(); onChange(false); } }
+      }));
+    }
+    if (q.scene) { drawSc(); el.appendChild(sceneBox); } else if (q.signs) el.appendChild(h(drawSignRow(q.signs)));
+    el.appendChild(h(`<h3>${tx(q.q)}</h3>${hint(q) ? `<p class="hint">${hint(q)}</p>` : ''}`));
+    el.appendChild(sayBtn(sayText(it)));
+    let opts = null, disp = null;
+    if (type === 'mc' || type === 'multi') {
+      opts = document.createElement('div'); opts.className = 'opts' + (q.o[0].sign ? ' signopts' : '');
+      it.order.forEach(k => {
+        const o = q.o[k], b = mk('opt', o.sign ? drawSignRow([o.sign], true) : (type === 'multi' ? '<span class="box"></span>' : '') + tx(o), () => {
+          if (type === 'mc') { it.ans = k; paint(); onChange(true); }
+          else { it.ans = it.ans || []; it.ans = it.ans.includes(k) ? it.ans.filter(x => x !== k) : it.ans.concat(k); paint(); onChange(false); }
+        });
+        if (o.sign) b.setAttribute('aria-label', o.sign.split(':')[0]);
+        b.dataset.k = k; opts.appendChild(b);
+      });
+      el.appendChild(opts);
+    }
+    if (type === 'num') {
+      disp = h(`<div class="numdisp"><span class="val"></span> <span class="unit">${tx(q.unit)}</span></div>`).firstChild;
+      const pad = document.createElement('div'); pad.className = 'pad';
+      ['1','2','3','4','5','6','7','8','9',',','0','⌫'].forEach(c => pad.appendChild(mk('key', c, () => {
+        if (locked) return; let v = it.ans || '';
+        if (c === '⌫') v = v.slice(0, -1); else if (c === ',') { if (v && !v.includes(',')) v += ','; } else if (v.length < 5) v += c;
+        it.ans = v; paint(); onChange(false);
+      })));
+      el.append(disp, pad);
+    }
+    if (type === 'order') el.appendChild(mk('say', '↺ ' + L().redo, () => { if (locked) return; it.ans = []; drawSc(); onChange(false); }));
+    function paint(){
+      if (opts) opts.querySelectorAll('.opt').forEach(b => {
+        const k = +b.dataset.k, on = type === 'mc' ? it.ans === k : (it.ans || []).includes(k);
+        b.classList.toggle('sel', on && !locked);
+        if (locked) { b.disabled = true; const good = type === 'mc' ? k === q.a : q.a.includes(k); b.classList.toggle('good', good); b.classList.toggle('bad', on && !good); }
+      });
+      if (disp) { disp.querySelector('.val').textContent = it.ans || '…'; if (locked) disp.classList.add(isRight(q, it.ans) ? 'good' : 'bad'); }
+    }
+    paint();
+    return { el, lock(){ locked = true; paint(); drawSc();
+      if (type === 'num' && !isRight(q, it.ans)) el.appendChild(h(`<p class="pass"><b>${L().rightIs}: ${numTxt(q.n)} ${tx(q.unit)}</b></p>`)); } };
+  }
+
+  /* ---------- bordentrainer: maakt vragen uit de bordenlijst ---------- */
+  function signQuestions(n){
+    const SG = window.SIGNS, w = g => { const r = S.sg[g.code]; return r ? r.bad*2 - r.ok : 1; };
+    const pick = shuffle(SG).sort((a, b) => w(b) - w(a)).slice(0, n);
+    return shuffle(pick).map((g, i) => {
+      const others = shuffle(SG.filter(x => x.code !== g.code)).sort((a, b) => (b.g === g.g) - (a.g === g.g));
+      const nm = ({ J: 'J37', Z30: 'A1 (zone)' })[g.code.split(':')[0]] || g.code.split(':')[0];
+      const why = { nl: `Bord ${nm}: ${g.nl}.`, en: `Sign ${nm}: ${g.en}.` };
+      if (i % 2 === 0) return { id: 'sg:' + g.code, gen: true, code: g.code, signs: [g.code], q: { nl: L0('sgQ1','nl'), en: L0('sgQ1','en') },
+        o: [g].concat(others.slice(0, 2)).map(x => ({ nl: x.nl, en: x.en })), a: 0, why };
+      return { id: 'sg:' + g.code, gen: true, code: g.code, q: { nl: L0('sgQ2','nl') + ' ' + g.nl + '?', en: L0('sgQ2','en') + ' ' + g.en + '?' },
+        o: [g].concat(others.slice(0, 3)).map(x => ({ sign: x.code })), a: 0, why };
+    });
+  }
+  const L0 = (k, lang) => UI[lang][k];
 
   /* ---------- voorlezen ---------- */
   const synth = window.speechSynthesis;
@@ -117,15 +251,24 @@
 
   /* ---------- home ---------- */
   function home(){
-    const l = L();
+    const l = L(), due = dueList();
+    const rev = due.length
+      ? stepBtn('↻', `${l.revBtn}: ${due.length}`, `${due.length} ${l.revN}`, null, () => startSession({ title: l.revTitle, qs: shuffle(due).slice(0, 20), back: () => nav(home) }))
+      : h(`<div class="card calm"><b>✓ ${l.revNone}</b><div class="hint">${l.revD}</div></div>`).firstChild;
+    if (due.length) rev.classList.add('examcard');
     const list = document.createElement('div'); list.className = 'tlist';
-    TOPICS.forEach((t, i) => list.appendChild(stepBtn(i+1, tx(t.title), `${t.cards.length} ${S.lang==='nl'?'kaartjes':'cards'} · ${t.questions.length} ${S.lang==='nl'?'vragen':'questions'}`, stats(t).all, () => nav(topic, t))));
-    const ex = stepBtn('★', l.exTitle, l.exD + (S.best !== null ? ` · ${l.exBest}: ${S.best}/50` : ''), null, () => nav(examIntro));
-    ex.classList.add('examcard');
+    TOPICS.forEach((t, i) => list.appendChild(stepBtn(i+1, tx(t.title), `${t.cards.length} ${l.cards} · ${t.questions.length} ${l.qs}`, stats(t).all, () => nav(topic, t))));
+    const test = document.createElement('div'); test.className = 'tlist';
+    test.append(stepBtn('▲', l.sgTitle, l.sgD, null, () => nav(signIntro)),
+                stepBtn('★', l.exTitle, l.exD + (S.best !== null ? ` · ${l.exBest}: ${S.best}/50` : ''), null, () => nav(examIntro)));
     const fun = document.createElement('div'); fun.className = 'fun';
     fun.append(mk('', 'Anna', () => joke('Anna', l.jokeAnna, '✊')), mk('', 'Jan Smeerlap', () => joke('Jan Smeerlap', l.jokeJan, '🤘')));
-    screen([h(`<h2>${l.welcome}</h2><p>${l.intro}</p>`), sayBtn(l.intro), h('<div style="height:10px"></div>'), list, h('<div style="height:10px"></div>'), ex, fun]);
-    autoSay(l.intro);
+    screen([h(`<h2 class="sec">${l.secToday}</h2>`), rev, h(`<h2 class="sec">${l.secLearn}</h2><p class="hint">${l.intro}</p>`), list, h(`<h2 class="sec">${l.secTest}</h2>`), test, fun]);
+  }
+  function signIntro(){
+    const l = L();
+    screen([h(`<h2>${l.sgTitle}</h2><div class="card"><p>${l.sgIntro}</p></div>`), sayBtn(l.sgIntro),
+      row(mk('btn ghost', '‹ ' + l.back, () => nav(home)), mk('btn', l.start, () => startSession({ title: l.sgTitle, qs: signQuestions(10), back: () => nav(home), again: () => startSession({ title: l.sgTitle, qs: signQuestions(10), back: () => nav(home) }) })))]);
   }
   function joke(name, text, emoji){
     openDlg(`<h3>${name}</h3><div class="joke"><div style="font-size:3rem">${emoji}</div>${text}</div><div class="row"><button class="btn" data-close>😂 ${L().close}</button></div>`);
@@ -199,53 +342,50 @@
     autoSay(say);
   }
 
-  /* ---------- 3. Toepassen ---------- */
+  /* ---------- 3. Toepassen, herhalen en bordentrainer: één oefensessie ---------- */
   let ses = null;
   function qVisual(q){ return q.scene ? `<div class="scene">${drawScene(q.scene, L())}</div>` : q.signs ? drawSignRow(q.signs) : ''; }
   function toepassen(t){
     const l = L();
     screen([h(`<div class="counter">${tx(t.title)}</div><h2 style="margin-top:4px">3. ${l.s3}</h2><p>${l.pIntro}</p><p class="hint">${l.weak}</p>`),
-      row(mk('btn ghost', '‹ ' + l.back, () => nav(topic, t)), mk('btn', l.start, () => startSession(t)))]);
+      row(mk('btn ghost', '‹ ' + l.back, () => nav(topic, t)), mk('btn', l.start, () => topicSession(t)))]);
   }
-  function startSession(t){
+  function topicSession(t){
     const score = q => { const s = S.q[q.id]; if (!s) return 1; return s.bad*2 - s.ok + (s.last === 0 ? 3 : 0); };
-    const pool = shuffle(t.questions).sort((a,b) => score(b) - score(a));
-    ses = { t, list: pool.slice(0, 10).map(q => ({ q, order: shuffle(q.o.map((_, k) => k)) })), i: 0, ok: 0, total: 0, retried: {}, picked: null };
+    startSession({ title: tx(t.title), qs: shuffle(t.questions).sort((a,b) => score(b) - score(a)).slice(0, 10), back: () => nav(topic, t), again: () => topicSession(t) });
+  }
+  function startSession(o){
+    ses = { title: o.title, back: o.back, again: o.again, list: o.qs.map(newItem), i: 0, ok: 0, total: 0, retried: {}, done: false };
     nav(question);
   }
   function question(){
-    const l = L(), it = ses.list[ses.i], q = it.q;
-    const body = h(`<div class="counter">${tx(ses.t.title)} · ${l.q} ${ses.i+1} ${l.of} ${ses.list.length}</div>
-      <div class="card">${qVisual(q)}<h3>${tx(q.q)}</h3><div class="opts"></div><div id="fb"></div></div>`);
-    const opts = body.querySelector('.opts'), fb = body.querySelector('#fb');
-    it.order.forEach(k => { const b = mk('opt', tx(q.o[k]), () => answer(k, true)); b.dataset.k = k; opts.appendChild(b); });
-    function answer(k, fresh){
-      const ok = k === q.a;
-      opts.querySelectorAll('.opt').forEach(b => { b.disabled = true; const j = +b.dataset.k; if (j === q.a) b.classList.add('good'); else if (j === k) b.classList.add('bad'); });
+    const l = L(), it = ses.list[ses.i], q = it.q, instant = !q.type || q.type === 'mc' || q.type === 'spot';
+    const card = h('<div class="card"></div>').firstChild, fb = document.createElement('div');
+    const chk = mk('btn', l.check, () => submit(true)); chk.disabled = !isComplete(q, it.ans);
+    const w = widget(it, direct => { if (ses.done) return; if (direct) submit(true); else chk.disabled = !isComplete(q, it.ans); });
+    card.appendChild(w.el); if (!instant) card.appendChild(row(chk)); card.appendChild(fb);
+    function submit(fresh){
+      const ok = isRight(q, it.ans); ses.done = true; w.lock(); chk.remove();
       if (fresh){
-        ses.picked = k;
-        const s = S.q[q.id] || { ok:0, bad:0, last:null };
-        ok ? s.ok++ : s.bad++; s.last = ok ? 1 : 0; S.q[q.id] = s; save();
+        record(q, ok);
         if (!ses.retried[q.id]) { ses.total++; if (ok) ses.ok++; }
-        if (!ok && !ses.retried[q.id]) { ses.retried[q.id] = 1; ses.list.splice(Math.min(ses.i + 3, ses.list.length), 0, { q, order: shuffle(it.order) }); }
+        if (!ok && !ses.retried[q.id]) { ses.retried[q.id] = 1; ses.list.splice(Math.min(ses.i + 3, ses.list.length), 0, newItem(q)); }
       }
-      const card = findCard(q.card);
+      const c = q.card ? findCard(q.card) : null;
       fb.innerHTML = `<div class="verdict ${ok?'good':'bad'}">${ok ? '✓ ' + l.good : '✗ ' + l.bad}</div>
-        <div class="why"><h4>${l.why}</h4>${tx(q.why)}</div><div class="src">${l.src}: ${card.src}</div>`;
+        <div class="why"><h4>${l.why}</h4>${tx(q.why)}</div><div class="src">${l.src}: ${c ? c.src : 'RVV 1990, bijlage 1'}</div>`;
       fb.appendChild(sayBtn((ok ? l.good : l.bad) + ' ' + tx(q.why)));
-      fb.appendChild(row(mk('btn ghost', l.rule, () => openDlg(`<h3>${tx(card.title)}</h3>${visual(card)}<ul class="lines">${tx(card.text).map(x=>`<li>${x}</li>`).join('')}</ul>${termChips(card)}<div class="row"><button class="btn" data-close>${l.close}</button></div>`)),
-        mk('btn', l.next + ' ›', () => { ses.i++; ses.picked = null; ses.i < ses.list.length ? nav(question) : nav(result); })));
+      const nx = mk('btn', l.next + ' ›', () => { ses.i++; ses.done = false; ses.i < ses.list.length ? nav(question) : nav(result); });
+      fb.appendChild(c ? row(mk('btn ghost', l.rule, () => openDlg(`<h3>${tx(c.title)}</h3>${visual(c)}<ul class="lines">${tx(c.text).map(x=>`<li>${x}</li>`).join('')}</ul>${termChips(c)}<div class="row"><button class="btn" data-close>${l.close}</button></div>`)), nx) : row(nx));
       if (fresh){ autoSay((ok ? l.good : l.bad) + ' ' + tx(q.why)); fb.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
     }
-    const say = tx(q.q) + ' ' + it.order.map((k, n) => (n+1) + '. ' + tx(q.o[k])).join('. ');
-    body.querySelector('.card').insertBefore(sayBtn(say), opts);
-    screen([body]);
-    if (ses.picked !== null) answer(ses.picked, false); else autoSay(tx(q.q));
+    screen([h(`<div class="counter">${ses.title} · ${l.q} ${ses.i+1} ${l.of} ${ses.list.length}</div>`), card]);
+    if (ses.done) submit(false); else autoSay(tx(q.q) + ' ' + hint(q));
   }
   function result(){
     const l = L(), m = `${ses.ok} / ${ses.total} ${l.score}`;
     screen([h(`<h2>${l.result}</h2><div class="card"><p style="font-size:1.6rem;font-weight:700;margin:0">${m}</p><p class="hint" style="margin-top:8px">${l.weak}</p></div>`),
-      row(mk('btn ghost', l.back, () => nav(topic, ses.t)), mk('btn', l.more, () => startSession(ses.t)))]);
+      ses.again ? row(mk('btn ghost', l.back, ses.back), mk('btn', l.more, ses.again)) : row(mk('btn', l.back, ses.back))]);
     autoSay(l.result + ' ' + m);
   }
 
@@ -261,7 +401,7 @@
     const per = Math.floor(50 / TOPICS.length); let list = [], rest = [];
     TOPICS.forEach(t => { const s = shuffle(t.questions); list.push(...s.slice(0, per).map(q => ({ q, t }))); rest.push(...s.slice(per).map(q => ({ q, t }))); });
     list.push(...shuffle(rest).slice(0, 50 - list.length));
-    ex = { list: shuffle(list).map(x => ({ q: x.q, t: x.t, order: shuffle(x.q.o.map((_, k) => k)), pick: null })), i: 0, end: Date.now() + min*60000, done: false };
+    ex = { list: shuffle(list).map(x => Object.assign(newItem(x.q), { t: x.t })), i: 0, end: Date.now() + min*60000, done: false };
     clearInterval(tick); tick = setInterval(examTick, 1000);
     nav(examQ);
   }
@@ -273,37 +413,33 @@
   }
   function finishExam(){ clearInterval(tick); ex.done = true; if (dlg.open) dlg.close(); nav(examResult); }
   function examQ(){
-    const l = L(), it = ex.list[ex.i], q = it.q;
-    const body = h(`<div class="timer"><span>${l.q} ${ex.i+1} ${l.of} 50</span><span>${l.exLeft}: <span id="tleft">${left()}</span></span></div>
-      <div class="card">${qVisual(q)}<h3>${tx(q.q)}</h3><div class="opts"></div></div>`);
-    const opts = body.querySelector('.opts');
-    it.order.forEach(k => { const b = mk('opt' + (it.pick === k ? ' sel' : ''), tx(q.o[k]), () => { it.pick = k; opts.querySelectorAll('.opt').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); }); opts.appendChild(b); });
-    const say = tx(q.q) + ' ' + it.order.map((k, n) => (n+1) + '. ' + tx(q.o[k])).join('. ');
-    body.querySelector('.card').insertBefore(sayBtn(say), opts);
+    const l = L(), it = ex.list[ex.i];
+    const card = h('<div class="card"></div>').firstChild; card.appendChild(widget(it, () => {}).el);
     const prev = mk('btn ghost', l.prev, () => { ex.i--; nav(examQ); }); prev.disabled = ex.i === 0;
     const next = mk('btn', ex.i < 49 ? l.next + ' ›' : l.result + ' ✓', () => { if (ex.i < 49) { ex.i++; nav(examQ); } else finishExam(); });
     const stop = mk('say', l.exStop, () => { openDlg(`<p>${l.exStopQ}</p><div class="row"><button class="btn ghost" data-close>${l.no}</button><button class="btn" id="exy">${l.yes}</button></div>`); $('#exy').onclick = finishExam; });
-    screen([body, row(prev, next), h('<div style="height:18px"></div>'), stop]);
-    autoSay(tx(q.q));
+    screen([h(`<div class="timer"><span>${l.q} ${ex.i+1} ${l.of} 50</span><span>${l.exLeft}: <span id="tleft">${left()}</span></span></div>`), card, row(prev, next), h('<div style="height:18px"></div>'), stop]);
+    autoSay(tx(it.q.q) + ' ' + hint(it.q));
   }
   function examResult(){
-    const l = L(), ok = ex.list.filter(x => x.pick === x.q.a).length, pass = ok >= 44;
+    const l = L(), good = x => isRight(x.q, x.ans), ok = ex.list.filter(good).length, pass = ok >= 44;
     if (S.best === null || ok > S.best) { S.best = ok; save(); }
-    ex.list.forEach(x => { if (x.pick === null) return; const s = S.q[x.q.id] || { ok:0, bad:0, last:null }; if (!x.counted) { x.pick === x.q.a ? s.ok++ : s.bad++; s.last = x.pick === x.q.a ? 1 : 0; S.q[x.q.id] = s; x.counted = 1; } }); save();
-    const rows = TOPICS.map(t => { const m = ex.list.filter(x => x.t === t); if (!m.length) return ''; return `<tr><td>${tx(t.title)}</td><td>${m.filter(x => x.pick === x.q.a).length} / ${m.length}</td></tr>`; }).join('');
-    const wrong = ex.list.filter(x => x.pick !== x.q.a);
+    ex.list.forEach(x => { if (!x.counted && isComplete(x.q, x.ans)) { record(x.q, good(x)); x.counted = 1; } });
+    const rows = TOPICS.map(t => { const m = ex.list.filter(x => x.t === t); if (!m.length) return ''; return `<tr><td>${tx(t.title)}</td><td>${m.filter(good).length} / ${m.length}</td></tr>`; }).join('');
+    const wrong = ex.list.filter(x => !good(x));
     const rev = document.createElement('div');
-    wrong.forEach(x => { const c = findCard(x.q.card);
-      rev.appendChild(h(`<div class="card">${qVisual(x.q)}<h3>${tx(x.q.q)}</h3>
-        <p class="fail">✗ ${l.yours}: ${x.pick === null ? l.noAns : tx(x.q.o[x.pick])}</p><p class="pass">✓ ${l.right}: ${tx(x.q.o[x.q.a])}</p>
-        <div class="why"><h4>${l.why}</h4>${tx(x.q.why)}</div><div class="src">${l.src}: ${c.src}</div></div>`).firstChild); });
-    const msgTxt = `${pass ? l.exPass : l.exFail} ${ok} / 50.`;
+    wrong.forEach(x => { const q = x.q, c = findCard(q.card), ra = rightAns(q);
+      let pic = qVisual(q);
+      if (q.scene && (q.type === 'spot' || q.type === 'order')) { const marks = {}; if (q.type === 'spot') marks[q.a] = { c:'#1f7a3a', t:'✓' }; else q.order.forEach((i, n) => marks[i] = { c:'#1f7a3a', t:String(n+1) }); pic = `<div class="scene">${drawScene(q.scene, Object.assign({}, L(), { marks }))}</div>`; }
+      rev.appendChild(h(`<div class="card">${pic}<h3>${tx(q.q)}</h3>
+        <p class="fail">✗ ${l.yours}: ${ansText(q, x.ans)}</p><p class="pass">✓ ${l.right}: ${q.type === 'num' ? ra + ' ' + tx(q.unit) : ansText(q, ra)}</p>
+        <div class="why"><h4>${l.why}</h4>${tx(q.why)}</div><div class="src">${l.src}: ${c.src}</div></div>`).firstChild); });
     screen([h(`<h2 class="${pass ? 'pass' : 'fail'}">${pass ? '✓ ' + l.exPass : l.exFail}</h2>
       <div class="card"><p style="font-size:1.8rem;font-weight:700;margin:0">${ok} / 50</p><p class="hint">${l.exNeed}</p></div>
       <div class="card"><h3>${l.exPer}</h3><table class="res">${rows}</table></div>
       <h3 style="margin-top:20px">${l.exWrong}</h3>${wrong.length ? '' : `<p>${l.exNone}</p>`}`), rev,
       row(mk('btn ghost', l.home, () => nav(home)), mk('btn', l.again, () => nav(examIntro)))]);
-    autoSay(msgTxt);
+    autoSay(`${pass ? l.exPass : l.exFail} ${ok} / 50.`);
   }
 
   /* ---------- dialoog en instellingen ---------- */
@@ -325,7 +461,7 @@
       if (k === 'fs' || k === 'rate') v = Number(v); if (k === 'auto') v = v === 'true';
       S[k] = v; save(); applyLook(); settings();
     });
-    $('#rst').onclick = () => { if (window.confirm(l.resetQ)) { S.cards = {}; S.why = {}; S.ladder = false; S.q = {}; S.best = null; save(); dlg.close(); nav(home); } };
+    $('#rst').onclick = () => { if (window.confirm(l.resetQ)) { S.cards = {}; S.why = {}; S.ladder = false; S.q = {}; S.sg = {}; S.best = null; save(); dlg.close(); nav(home); } };
   }
   function applyLook(){
     document.documentElement.style.setProperty('--fs', S.fs + 'px');
@@ -341,6 +477,7 @@
   $('#homeBtn').onclick = () => { if (ex && !ex.done) { openDlg(`<p>${L().exStopQ}</p><div class="row"><button class="btn ghost" data-close>${L().no}</button><button class="btn" id="exy">${L().yes}</button></div>`); $('#exy').onclick = finishExam; } else nav(home); };
   $('#setBtn').onclick = settings;
 
+  window.__test = qs => startSession({ title: 'Test', qs, back: () => nav(home) });
   applyLook(); nav(home);
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();

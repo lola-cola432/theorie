@@ -39,14 +39,18 @@
     return `<circle cx="0" cy="-10" r="7" fill="#7a3fb8" stroke="#1b1b1b" stroke-width="2"/>
       <rect x="-7" y="-2" width="14" height="18" rx="5" fill="#7a3fb8" stroke="#1b1b1b" stroke-width="2"/>`;
   }
-  function actor(a, L) {
+  function actor(a, L, i) {
     let x, y, r;
     if (a.p) { const P = (a.t === 'bike' ? BIKEPOS : POS)[a.p]; [x, y, r] = P; if (a.t === 'tram') { y = 170; x = 50; } }
     else { x = a.x; y = a.y; r = a.r || 0; }
     let body = a.t === 'car' ? car(a.c, a.me) : a.t === 'amb' ? amb() : a.t === 'bike' ? bike() : a.t === 'tram' ? tram() : ped();
     const arr = a.m && a.t !== 'ped' ? arrow(a.m) : '';
     const lab = a.me ? `<g transform="rotate(${-r})">${label(L.me)}</g>` : '';
-    return `<g transform="translate(${x},${y}) rotate(${r})">${arr}${body}${lab}</g>`;
+    const mk = L.marks && L.marks[i];
+    const ring = mk ? `<circle r="30" fill="none" stroke="${mk.c}" stroke-width="5"/>` : (L.tap ? `<circle r="30" fill="none" stroke="#1b1b1b" stroke-width="2" stroke-dasharray="5 5" opacity=".55"/>` : '');
+    const badge = mk && mk.t ? `<g transform="rotate(${-r}) translate(24,-24)"><circle r="14" fill="${mk.c}" stroke="#fff" stroke-width="2"/><text y="6" text-anchor="middle" font-size="17" font-weight="800" fill="#fff">${mk.t}</text></g>` : '';
+    const hit = L.tap ? `<circle r="36" fill="transparent"/>` : '';
+    return `<g class="act" data-i="${i}" transform="translate(${x},${y}) rotate(${r})"${L.tap ? ' style="cursor:pointer"' : ''}>${arr}${body}${lab}${ring}${badge}${hit}</g>`;
   }
   function sign(s, p) {
     const at = { S: [214, 228], E: [226, 88], W: [74, 212], N: [86, 72] }[p];
@@ -138,7 +142,7 @@
     (o.signs || []).forEach(z => fg += sign(z.s, z.p));
     if (o.light) fg += light(o.light);
     if (o.agent) fg += agent();
-    (o.actors || []).forEach(a => fg += actor(a, L));
+    (o.actors || []).forEach((a, i) => fg += actor(a, L, i));
     return `<svg viewBox="0 0 300 300" role="img" aria-label="${L.aria}" xmlns="http://www.w3.org/2000/svg">
       <defs><marker id="ah" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#1b1b1b"/></marker>
       <marker id="ahw" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#fff"/></marker></defs>
@@ -151,6 +155,12 @@
   const TRI = (inner) => `<polygon points="0,-24 25,19 -25,19" fill="#fff" stroke="#d1121b" stroke-width="6" stroke-linejoin="round"/>${inner || ''}`;
   const SQ = (inner) => `<rect x="-24" y="-24" width="48" height="48" rx="5" fill="${BLUE}" stroke="#fff" stroke-width="2"/>${inner || ''}`;
   const carIcon = (x, c) => `<g transform="translate(${x},0)"><rect x="-8" y="-3" width="16" height="9" rx="2" fill="${c}"/><rect x="-5" y="-9" width="10" height="7" rx="2" fill="${c}"/></g>`;
+  const ARW = 'M0,-17 L10,-4 H4 V16 H-4 V-4 H-10 Z';
+  const man = (x, y, sc, c) => `<g transform="translate(${x},${y}) scale(${sc})" fill="none" stroke="${c}" stroke-width="3.200" stroke-linecap="round"><circle cx="0" cy="-11" r="3.400" fill="${c}" stroke="none"/><path d="M0,-6 V4 M0,4 L-5,13 M0,4 L5,13 M-6,-1 L6,-3"/></g>`;
+  const bikeIc = (c, sc, y) => `<g transform="translate(0,${y || 0}) scale(${sc || 1})" fill="none" stroke="${c}" stroke-width="2.600"><circle cx="-11" cy="6" r="7.500"/><circle cx="11" cy="6" r="7.500"/><path d="M-11,6 L-4,-6 H7 L11,6 M-4,-6 L2,6 H-11 M7,-6 L5,-11 H10 M-7,-9 H-1"/></g>`;
+  const truck = (x, c) => `<g transform="translate(${x},0)"><rect x="-10" y="-9" width="13" height="14" fill="${c}"/><rect x="3" y="-3" width="7" height="8" fill="${c}"/><circle cx="-6" cy="7" r="2.600" fill="${c}"/><circle cx="6" cy="7" r="2.600" fill="${c}"/></g>`;
+  const STRIPES = `<g stroke="#1b1b1b" stroke-width="1.800"><line x1="-18" y1="13" x2="13" y2="-18"/><line x1="-15.500" y1="15.500" x2="15.500" y2="-15.500"/><line x1="-13" y1="18" x2="18" y2="-13"/></g>`;
+  const REDBAR = `<line x1="-24" y1="24" x2="24" y2="-24" stroke="#d1121b" stroke-width="6"/>`;
   function signSvg(code) {
     const [k, arg] = code.split(':');
     const M = {
@@ -179,6 +189,35 @@
       G3: SQ(`<rect x="-15" y="-2" width="30" height="11" rx="3" fill="#fff"/><path d="M-10,-2 L-7,-11 H7 L10,-2 Z" fill="#fff"/><rect x="-13" y="9" width="6" height="6" fill="#fff"/><rect x="7" y="9" width="6" height="6" fill="#fff"/>`),
       G11: `<circle r="27" fill="${BLUE}" stroke="#fff" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="2.600"><circle cx="-11" cy="6" r="7.500"/><circle cx="11" cy="6" r="7.500"/><path d="M-11,6 L-4,-6 H7 L11,6 M-4,-6 L2,6 H-11 M7,-6 L5,-11 H10 M-7,-9 H-1"/></g>`,
       H1: `<rect x="-28" y="-15" width="56" height="30" rx="3" fill="${BLUE}" stroke="#fff" stroke-width="2"/><text x="0" y="5" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Leek</text>`,
+      A2: `<circle r="26" fill="#fff" stroke="#1b1b1b" stroke-width="2"/><text x="0" y="8" text-anchor="middle" font-size="23" font-weight="800" fill="#9a9a9a">${arg || '50'}</text>${STRIPES}`,
+      A4: SQ(`<text x="0" y="9" text-anchor="middle" font-size="24" font-weight="800" fill="#fff">${arg || '60'}</text>`),
+      C4: `<rect x="-28" y="-13" width="56" height="26" rx="3" fill="${BLUE}" stroke="#fff" stroke-width="2"/><path d="M-20,-4 H6 V-10 L21,0 L6,10 V4 H-20 Z" fill="#fff"/>`,
+      C6: RING(`<g transform="scale(1.500)">${carIcon(0, '#1b1b1b')}</g>`),
+      C7: RING(`<g transform="scale(1.300)">${truck(0, '#1b1b1b')}</g>`),
+      C14: RING(bikeIc('#1b1b1b', 0.800, -2)),
+      C16: RING(man(0, 1, 1.150, '#1b1b1b')),
+      D2: `<circle r="27" fill="${BLUE}" stroke="#fff" stroke-width="2"/><path transform="rotate(135)" d="${ARW}" fill="#fff"/>`,
+      D4: `<circle r="27" fill="${BLUE}" stroke="#fff" stroke-width="2"/><path d="${ARW}" fill="#fff"/>`,
+      F2: `<circle r="26" fill="#fff" stroke="#1b1b1b" stroke-width="2"/>${carIcon(-9, '#9a9a9a')}${carIcon(9, '#9a9a9a')}${STRIPES}`,
+      F3: RING(`<g transform="scale(.900)">${truck(-11, '#d1121b')}</g>` + carIcon(10, '#1b1b1b')),
+      F7: RING(`<path d="M8,13 V-3 A8,8 0 0 0 -8,-3 V4" fill="none" stroke="#1b1b1b" stroke-width="5"/><polygon points="-15,3 -1,3 -8,13" fill="#1b1b1b"/><line x1="-17" y1="17" x2="17" y2="-17" stroke="#d1121b" stroke-width="5"/>`),
+      G2: SQ(`<path d="M-10,19 L-4,-8 H-1.500 L-3,19 Z M10,19 L4,-8 H1.500 L3,19 Z" fill="#fff"/><rect x="-18" y="-13" width="36" height="5" fill="#fff"/><rect x="-18" y="-8" width="3" height="6" fill="#fff"/><rect x="15" y="-8" width="3" height="6" fill="#fff"/>${REDBAR}`),
+      G4: SQ(`<rect x="-15" y="-2" width="30" height="11" rx="3" fill="#fff"/><path d="M-10,-2 L-7,-11 H7 L10,-2 Z" fill="#fff"/><rect x="-13" y="9" width="6" height="6" fill="#fff"/><rect x="7" y="9" width="6" height="6" fill="#fff"/>${REDBAR}`),
+      G7: `<circle r="27" fill="${BLUE}" stroke="#fff" stroke-width="2"/>${man(-6, 0, 1.250, '#fff')}${man(10, 5, .850, '#fff')}`,
+      G13: `<rect x="-28" y="-11" width="56" height="22" rx="3" fill="${BLUE}" stroke="#fff" stroke-width="2"/><text x="0" y="4" text-anchor="middle" font-size="10.500" font-weight="800" fill="#fff">fietspad</text>`,
+      H2: `<rect x="-28" y="-15" width="56" height="30" rx="3" fill="${BLUE}" stroke="#fff" stroke-width="2"/><text x="0" y="5" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Leek</text><line x1="-27" y1="14" x2="27" y2="-14" stroke="#d1121b" stroke-width="5"/>`,
+      J2: TRI(`<path d="M-5,14 V3 Q-5,-5 4,-5" fill="none" stroke="#1b1b1b" stroke-width="4"/><polygon points="3,-11 12,-5 3,1" fill="#1b1b1b"/>`),
+      J3: TRI(`<path d="M5,14 V3 Q5,-5 -4,-5" fill="none" stroke="#1b1b1b" stroke-width="4"/><polygon points="-3,-11 -12,-5 -3,1" fill="#1b1b1b"/>`),
+      J8: TRI(`<path d="M-9,-4 L9,13 M9,-4 L-9,13" stroke="#1b1b1b" stroke-width="4.500"/>`),
+      J9: TRI(`<g transform="translate(0,5) scale(.520)"><g fill="none" stroke="#1b1b1b" stroke-width="6">` + [0, 120, 240].map(a => `<path transform="rotate(${a})" d="M-4.5,-14.3 A15,15 0 0 0 -14.6,3.4"/>`).join('') + `</g>` + [0, 120, 240].map(a => `<polygon transform="rotate(${a})" points="-22,1 -7,2 -15,12" fill="#1b1b1b"/>`).join('') + `</g>`),
+      J17: TRI(`<path d="M-8,14 V5 L-3,-1 V-9 M8,14 V5 L3,-1 V-9" fill="none" stroke="#1b1b1b" stroke-width="3.200"/>`),
+      J24: TRI(bikeIc('#1b1b1b', 0.580, 5)),
+      J29: TRI(`<path transform="translate(-6,4) scale(.600) rotate(180)" d="${ARW}" fill="#1b1b1b"/><path transform="translate(6,4) scale(.600)" d="${ARW}" fill="#1b1b1b"/>`),
+      J32: TRI(`<rect x="-5" y="-9" width="10" height="24" rx="3" fill="#1b1b1b"/><circle cy="-4" r="2.800" fill="#e3241b"/><circle cy="3" r="2.800" fill="#f6a400"/><circle cy="10" r="2.800" fill="#21b14b"/>`),
+      J36: TRI(`<g transform="translate(0,5)" stroke="#1b1b1b" stroke-width="2.600" stroke-linecap="round"><line x1="0" y1="-9" x2="0" y2="9"/><line x1="-8" y1="-4.500" x2="8" y2="4.500"/><line x1="-8" y1="4.500" x2="8" y2="-4.500"/></g>`),
+      L2: SQ(`<polygon points="0,-18 20,17 -20,17" fill="#fff"/>${man(0, 5, .800, '#1b1b1b')}`),
+      L8: SQ(`<rect x="-4" y="-9" width="8" height="27" fill="#fff"/><rect x="-14" y="-17" width="28" height="8" fill="#d1121b" stroke="#fff" stroke-width="1"/>`),
+      Z30: `<rect x="-21" y="-28" width="42" height="56" rx="3" fill="#fff" stroke="#1b1b1b" stroke-width="2"/><text x="0" y="-13" text-anchor="middle" font-size="11" font-weight="800" fill="#1b1b1b">ZONE</text><circle cy="8" r="13" fill="#fff" stroke="#d1121b" stroke-width="4.500"/><text x="0" y="12.500" text-anchor="middle" font-size="12" font-weight="800" fill="#1b1b1b">30</text>`,
       J: TRI(`<rect x="-2.500" y="-9" width="5" height="15" fill="#1b1b1b"/><circle cx="0" cy="11" r="3" fill="#1b1b1b"/>`),
       X: `<rect x="-22" y="-22" width="44" height="44" rx="5" fill="#1b1b1b"/>` + (arg === 'groen'
           ? `<path d="M0,16 L-12,0 H-5 V-16 H5 V0 H12 Z" fill="#21b14b"/>`
@@ -187,9 +226,11 @@
     };
     return M[k] || '';
   }
-  const CAP = { H: '▽▽▽', X: '', L: '', J: 'J37', H1: 'H1' };
-  window.drawSignRow = function (list) {
+  const CAP = { H: '▽▽▽', X: '', L: '', J: 'J37', Z30: 'A1 zone' };
+  window.signSvg = signSvg;
+  window.drawSignRow = function (list, plain) {
     const one = code => { const k = code.split(':')[0];
+      if (plain) return `<svg viewBox="-30 -30 60 60" width="72" height="72" aria-hidden="true">${signSvg(code)}</svg>`;
       return `<figure class="sg"><svg viewBox="-30 -30 60 60" width="64" height="64" aria-hidden="true">${signSvg(code)}</svg><figcaption>${k in CAP ? CAP[k] : k}</figcaption></figure>`; };
     return `<div class="signrow">${list.map(one).join('')}</div>`;
   };
