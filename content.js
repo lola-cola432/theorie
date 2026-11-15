@@ -1,39 +1,43 @@
+/* Hulpjes om lesstof kort te noteren (gebruikt in t2.js t/m t9.js) */
+window.C = (id, tn, te, ln, le, wn, we, terms, src, signs) => ({ id, title: { nl: tn, en: te }, text: { nl: ln, en: le }, why: { nl: wn, en: we }, terms, src, signs });
+window.Q = (id, card, qn, qe, opts, a, wn, we, signs) => ({ id, card, q: { nl: qn, en: qe }, o: opts.map(o => ({ nl: o[0], en: o[1] })), a, why: { nl: wn, en: we }, signs });
 /* Lesstof: Voorrang. Alle regels gecontroleerd tegen het RVV 1990.
    Elke tekst staat in het Nederlands (nl) en Engels (en). */
-window.TOPIC = {
+window.TOPICS = window.TOPICS || [];
+window.TOPICS.push({
   id: 'voorrang',
-  title: { nl: 'Voorrang', en: 'Right of way (voorrang)' },
+  title: { nl: 'Voorrang', en: 'Right of way' },
 
   /* ---------- 1. WETEN (Grammatica): de feiten ---------- */
   cards: [
     {
       id: 'c1', scene: null, icon: 'people',
-      title: { nl: 'Wie is een bestuurder?', en: 'Who is a "bestuurder" (driver)?' },
+      title: { nl: 'Wie is een bestuurder?', en: 'Who counts as a driver?' },
       text: {
         nl: ['Een <b>bestuurder</b> is iedereen in het verkeer, <b>behalve een voetganger</b>.',
              'Auto, fiets, brommer, scooter, motor en tram: allemaal bestuurders.',
              '<b>Voorrang</b> geldt alleen tussen bestuurders.'],
-        en: ['A <b>bestuurder</b> is every road user <b>except a pedestrian</b>.',
-             'Car, bicycle, moped, scooter, motorbike and tram: all of them are bestuurders.',
-             '<b>Right of way</b> (voorrang) only applies between bestuurders.']
+        en: ['In Dutch traffic law, a <b>driver</b> is every road user <b>except a pedestrian</b>.',
+             'Car, bicycle, moped, scooter, motorbike and tram: all of them count as drivers. So a cyclist is a driver too.',
+             '<b>Right of way</b> only applies between drivers.']
       },
       why: {
         nl: 'Bij elke voorrangsvraag kijk je eerst: is de ander een bestuurder? Is het een voetganger? Dan gaat het niet over voorrang, maar over "voor laten gaan".',
-        en: 'With every right-of-way question, first check: is the other person a bestuurder? If it is a pedestrian, it is not about right of way, but about "letting them go first" (voor laten gaan).'
+        en: 'With every right-of-way question, first check: is the other person a driver? If it is a pedestrian, it is not about right of way, but about letting them go first.'
       },
       terms: ['bestuurder', 'voetganger'],
       src: 'RVV 1990, art. 1'
     },
     {
       id: 'c2', scene: null, icon: 'yield',
-      title: { nl: 'Wat is voorrang verlenen?', en: 'What does "voorrang verlenen" mean?' },
+      title: { nl: 'Wat is voorrang verlenen?', en: 'What does giving way mean?' },
       text: {
         nl: ['<b>Voorrang verlenen</b> betekent: de ander kan gewoon doorrijden.',
              'Hij hoeft niet te remmen of uit te wijken voor jou.',
              '<b>Voorrang krijgen</b> betekent: jij mag eerst.'],
-        en: ['<b>Voorrang verlenen</b> (to give way) means: the other driver can simply carry on.',
+        en: ['<b>Giving way</b> means: the other driver can simply carry on.',
              'They do not have to brake or swerve because of you.',
-             '<b>Voorrang krijgen</b> (to have right of way) means: you may go first.']
+             '<b>Having right of way</b> means: you may go first.']
       },
       why: {
         nl: 'Het gaat er niet om dat jij stilstaat. Het gaat erom dat de ander geen last van jou heeft. Rem daarom op tijd en rustig af, zodat de ander ziet dat je wacht.',
@@ -44,22 +48,22 @@ window.TOPIC = {
     },
     {
       id: 'c3', scene: null, icon: 'ped',
-      title: { nl: 'Voorrang of voor laten gaan?', en: 'Right of way or "voor laten gaan"?' },
+      title: { nl: 'Voorrang of voor laten gaan?', en: 'Right of way, or letting someone go first?' },
       text: {
         nl: ['<b>Voorrang</b> gaat over bestuurders.',
              'Bij voetgangers en bij bijzondere situaties heet het <b>voor laten gaan</b>.',
              'Voorbeelden: een voetganger op het zebrapad, een ambulance met zwaailicht en sirene, of jij die uit een uitrit rijdt.',
              'Voor laten gaan betekent: de ander gaat eerst.'],
-        en: ['<b>Right of way</b> (voorrang) is about bestuurders.',
-             'With pedestrians and in special situations it is called <b>voor laten gaan</b> (let them go first).',
-             'Examples: a pedestrian on a zebra crossing, an ambulance with blue lights and siren, or you driving out of an exit (uitrit).',
-             'Voor laten gaan means: the other one goes first.']
+        en: ['<b>Right of way</b> is about drivers.',
+             'With pedestrians and in special situations the law says: <b>let them go first</b>.',
+             'Examples: a pedestrian on a zebra crossing, an ambulance with blue lights and siren, or you driving out of an exit.',
+             'Letting someone go first means: the other one goes before you.']
       },
       why: {
         nl: 'In de wet zijn dit twee verschillende woorden. In een examenvraag is het woord dus een hint. Lees goed welk woord er staat.',
-        en: 'In the law these are two different words. So in an exam question, the word itself is a clue. Read carefully which word is used.'
+        en: 'In Dutch law these are two different terms. So in an exam question, the term itself is a clue. Read carefully which one is used.'
       },
-      terms: ['voorrang', 'voor laten gaan'],
+      terms: ['voorrang', 'voor laten gaan', 'uitrit'],
       src: 'RVV 1990, art. 1, 49, 50 en 54'
     },
     {
@@ -69,8 +73,8 @@ window.TOPIC = {
         nl: ['Een kruispunt zonder borden, lichten of haaientanden heet een <b>gelijkwaardig kruispunt</b>.',
              'Daar geef je voorrang aan bestuurders die <b>van rechts</b> komen.',
              'Ook aan een fietser van rechts.'],
-        en: ['A junction without signs, traffic lights or shark\'s teeth is an <b>equal junction</b> (gelijkwaardig kruispunt).',
-             'There you give way to bestuurders coming <b>from your right</b>.',
+        en: ['A junction without signs, traffic lights or shark\'s teeth is an <b>equal junction</b>.',
+             'There you give way to drivers coming <b>from your right</b>.',
              'That includes a cyclist from the right.']
       },
       why: {
@@ -87,8 +91,8 @@ window.TOPIC = {
         nl: ['Kom je van een <b>onverharde weg</b>, zoals een zandpad?',
              'Dan geef je voorrang aan iedereen op de <b>verharde weg</b>.',
              'Ook als die van links komt.'],
-        en: ['Are you coming from an <b>unpaved road</b> (onverharde weg), like a dirt track?',
-             'Then you give way to everyone on the <b>paved road</b> (verharde weg).',
+        en: ['Are you coming from an <b>unpaved road</b>, like a dirt track?',
+             'Then you give way to everyone on the <b>paved road</b>.',
              'Even if they come from your left.']
       },
       why: {
@@ -113,7 +117,7 @@ window.TOPIC = {
         nl: 'Een tram is zwaar en rijdt op rails. Hij kan niet uitwijken en heeft een lange remweg.',
         en: 'A tram is heavy and runs on rails. It cannot swerve and needs a long distance to stop.'
       },
-      terms: ['tram'],
+      terms: ['tram', 'gelijkwaardig kruispunt'],
       src: 'RVV 1990, art. 15 lid 2b en art. 80'
     },
     {
@@ -124,7 +128,7 @@ window.TOPIC = {
              '<b>B2</b> (ruit met streep): einde voorrangsweg.',
              '<b>B3</b>: je hebt alleen voorrang op het <b>volgende</b> kruispunt.',
              '<b>B4</b> en <b>B5</b>: ook voorrang op het volgende kruispunt. De zijweg is links (B4) of rechts (B5).'],
-        en: ['<b>B1</b> (yellow diamond): you are on a priority road (voorrangsweg). You have right of way at every junction, until sign B2.',
+        en: ['<b>B1</b> (yellow diamond): you are on a priority road. You have right of way at every junction, until sign B2.',
              '<b>B2</b> (diamond with a line): end of the priority road.',
              '<b>B3</b>: you only have right of way at the <b>next</b> junction.',
              '<b>B4</b> and <b>B5</b>: also right of way at the next junction. The side road is on the left (B4) or on the right (B5).']
@@ -143,15 +147,15 @@ window.TOPIC = {
         nl: ['<b>B6</b> (driehoek op zijn punt): geef voorrang aan bestuurders op de kruisende weg. Komt er niemand? Dan mag je doorrijden.',
              '<b>B7</b> (STOP): je moet <b>altijd stoppen</b>. Daarna geef je voorrang.',
              '<b>Haaientanden</b> op de weg betekenen hetzelfde als B6. De punten wijzen naar jou.'],
-        en: ['<b>B6</b> (triangle pointing down): give way to bestuurders on the crossing road. Nobody coming? Then you may drive on.',
+        en: ['<b>B6</b> (triangle pointing down): give way to drivers on the crossing road. Nobody coming? Then you may drive on.',
              '<b>B7</b> (STOP): you must <b>always stop</b>. Then you give way.',
-             '<b>Shark\'s teeth</b> (haaientanden) on the road mean the same as B6. The points face you.']
+             '<b>Shark\'s teeth</b> (white triangles) on the road mean the same as B6. The points face you.']
       },
       why: {
         nl: 'Bij drukke of onoverzichtelijke kruispunten is "rechts gaat voor" niet veilig genoeg. Dan kiest de wegbeheerder met borden wie moet wachten.',
         en: 'At busy or unclear junctions "right goes first" is not safe enough. Then the road authority uses signs to decide who has to wait.'
       },
-      terms: ['haaientanden'],
+      terms: ['haaientanden', 'voorrang verlenen'],
       src: 'RVV 1990, bijlage 1 (B6, B7) en art. 80'
     },
     {
@@ -164,7 +168,7 @@ window.TOPIC = {
              'Deze regels gelden niet voor de tram.'],
         en: ['Are you turning? Then you let traffic that goes <b>straight on along the same road</b> go first.',
              'That includes the cyclist next to you on the cycle path.',
-             'You turn left and the oncoming driver turns right into the same road? Then the oncoming driver goes first: <b>the short turn goes first</b> (korte bocht gaat voor).',
+             'You turn left and the oncoming driver turns right into the same road? Then the oncoming driver goes first: <b>the short turn goes first</b>.',
              'These rules do not apply to trams.']
       },
       why: {
@@ -176,18 +180,18 @@ window.TOPIC = {
     },
     {
       id: 'c10', scene: { type: 'uitrit', actors: [{ t: 'car', x: 150, y: 250, r: 0, m: 'straight', me: 1 }, { t: 'bike', x: 60, y: 196, r: 90 }, { t: 'ped', x: 232, y: 214 }] },
-      title: { nl: 'Uit een uitrit rijden', en: 'Driving out of an exit (uitrit)' },
+      title: { nl: 'Uit een uitrit rijden', en: 'Driving out of an exit' },
       text: {
         nl: ['Een <b>uitrit</b> is bijvoorbeeld de uitgang van een parkeerplaats, een tankstation of een oprit.',
              'Je rijdt dan vaak over de stoep of een verhoogde rand.',
              'Je laat dan <b>al het verkeer</b> voor gaan, ook voetgangers.'],
-        en: ['An <b>exit</b> (uitrit) is for example the way out of a car park, a petrol station or a driveway.',
+        en: ['An <b>exit</b> is for example the way out of a car park, a petrol station or a driveway.',
              'You often drive over the pavement or a raised kerb.',
              'You then let <b>all traffic</b> go first, pedestrians too.']
       },
       why: {
         nl: 'Uit een uitrit de weg oprijden is een "bijzondere manoeuvre". Het verkeer op de weg verwacht jou niet. Daarom wacht jij.',
-        en: 'Driving out of an exit onto the road is a "special manoeuvre" (bijzondere manoeuvre). Traffic on the road does not expect you. That is why you wait.'
+        en: 'Driving out of an exit onto the road is a "special manoeuvre". Traffic on the road does not expect you. That is why you wait.'
       },
       terms: ['uitrit', 'bijzondere manoeuvre'],
       src: 'RVV 1990, art. 54'
@@ -199,7 +203,7 @@ window.TOPIC = {
         nl: ['Staat een voetganger op het zebrapad, of loopt hij het op?',
              'Dan laat je hem <b>voor gaan</b>.'],
         en: ['Is a pedestrian on the zebra crossing, or stepping onto it?',
-             'Then you <b>let them go first</b> (voor laten gaan).']
+             'Then you <b>let them go first</b>.']
       },
       why: {
         nl: 'Een voetganger heeft geen bescherming. Het zebrapad is de plek waar hij veilig moet kunnen oversteken.',
@@ -235,7 +239,7 @@ window.TOPIC = {
              '3. <b>Verkeersborden en haaientanden</b>.',
              '4. De gewone <b>verkeersregels</b>, zoals rechts gaat voor.',
              'Werkt het licht niet, of knippert het oranje? Volg dan de borden. Geen borden? Dan rechts gaat voor.'],
-        en: ['1. <b>Instructions</b> from police or a traffic controller (aanwijzingen).',
+        en: ['1. <b>Instructions</b> from police or a traffic controller.',
              '2. <b>Traffic lights</b>.',
              '3. <b>Traffic signs and shark\'s teeth</b>.',
              '4. The normal <b>traffic rules</b>, such as right goes first.',
@@ -260,7 +264,7 @@ window.TOPIC = {
       yes: { nl: 'Volg het licht.', en: 'Follow the light.' }, card: 'c13' },
     { q: { nl: 'Zijn er voorrangsborden of haaientanden?', en: 'Are there priority signs or shark\'s teeth?' },
       yes: { nl: 'Volg de borden. B1, B3, B4, B5: jij gaat. B6, B7, haaientanden: jij wacht.', en: 'Follow the signs. B1, B3, B4, B5: you go. B6, B7, shark\'s teeth: you wait.' }, card: 'c8' },
-    { q: { nl: 'Kom je uit een uitrit?', en: 'Are you coming out of an exit (uitrit)?' },
+    { q: { nl: 'Kom je uit een uitrit?', en: 'Are you coming out of an exit?' },
       yes: { nl: 'Laat al het verkeer voor gaan, ook voetgangers.', en: 'Let all traffic go first, pedestrians too.' }, card: 'c10' },
     { q: { nl: 'Is er een tram?', en: 'Is there a tram?' },
       yes: { nl: 'De tram gaat eerst.', en: 'The tram goes first.' }, card: 'c6' },
@@ -282,7 +286,7 @@ window.TOPIC = {
       scene: { arms: 'NESW', actors: [{ t: 'car', p: 'S', m: 'straight', me: 1 }, { t: 'bike', p: 'E', m: 'straight' }] },
       q: { nl: 'Een fietser komt van rechts. Er zijn geen borden. Moet je hem voorrang geven?', en: 'A cyclist comes from the right. There are no signs. Must you give way?' },
       o: [{ nl: 'Ja', en: 'Yes' }, { nl: 'Nee, een auto gaat voor', en: 'No, a car goes first' }], a: 0,
-      why: { nl: 'Een fietser is een bestuurder. Hij komt van rechts, dus hij gaat voor.', en: 'A cyclist is a bestuurder. They come from the right, so they go first.' } },
+      why: { nl: 'Een fietser is een bestuurder. Hij komt van rechts, dus hij gaat voor.', en: 'A cyclist counts as a driver. They come from the right, so they go first.' } },
     { id: 'q3', card: 'c4',
       scene: { arms: 'NESW', actors: [{ t: 'car', p: 'S', m: 'straight', me: 1 }, { t: 'bike', p: 'W', m: 'straight' }] },
       q: { nl: 'Een fietser komt van links. Er zijn geen borden. Wie mag eerst?', en: 'A cyclist comes from the left. There are no signs. Who goes first?' },
@@ -291,8 +295,8 @@ window.TOPIC = {
     { id: 'q4', card: 'c11',
       scene: { arms: 'NS', zebra: 1, actors: [{ t: 'car', p: 'S', m: 'straight', me: 1 }, { t: 'ped', x: 165, y: 128 }] },
       q: { nl: 'Er loopt een voetganger op het zebrapad. Wat doe je?', en: 'A pedestrian is walking on the zebra crossing. What do you do?' },
-      o: [{ nl: 'Ik laat hem voor gaan', en: 'I let them go first' }, { nl: 'Ik rijd door, hij is geen bestuurder', en: 'I drive on, they are not a bestuurder' }], a: 0,
-      why: { nl: 'Op het zebrapad laat je voetgangers voor gaan. Dat is geen voorrang, maar "voor laten gaan".', en: 'At a zebra crossing you let pedestrians go first. That is not right of way, but "voor laten gaan".' } },
+      o: [{ nl: 'Ik laat hem voor gaan', en: 'I let them go first' }, { nl: 'Ik rijd door, hij is geen bestuurder', en: 'I drive on, a pedestrian is not a driver' }], a: 0,
+      why: { nl: 'Op het zebrapad laat je voetgangers voor gaan. Dat is geen voorrang, maar "voor laten gaan".', en: 'At a zebra crossing you let pedestrians go first. The law does not call this right of way, but letting them go first.' } },
     { id: 'q5', card: 'c5',
       scene: { arms: 'NESW', unpaved: 'E', actors: [{ t: 'car', p: 'S', m: 'straight', me: 1 }, { t: 'car', p: 'E', m: 'straight', c: '#2f6fd6' }] },
       q: { nl: 'De blauwe auto komt van rechts, over een zandpad. Wie mag eerst?', en: 'The blue car comes from the right, on a dirt road. Who goes first?' },
@@ -361,12 +365,12 @@ window.TOPIC = {
     { id: 'q18', card: 'c3',
       scene: { arms: 'NESW', actors: [{ t: 'car', p: 'S', m: 'straight', me: 1 }, { t: 'ped', x: 232, y: 98 }] },
       q: { nl: 'Op een kruispunt zonder zebrapad wil een voetganger van rechts oversteken. Heeft hij voorrang?', en: 'At a junction without a zebra crossing, a pedestrian on the right wants to cross. Does the pedestrian have right of way?' },
-      o: [{ nl: 'Ja, hij komt van rechts', en: 'Yes, they come from the right' }, { nl: 'Nee, voorrang is alleen tussen bestuurders', en: 'No, right of way is only between bestuurders' }], a: 1,
-      why: { nl: 'Een voetganger is geen bestuurder, dus "rechts gaat voor" geldt niet voor hem. Let wel goed op: je mag nooit gevaar veroorzaken.', en: 'A pedestrian is not a bestuurder, so "right goes first" does not apply to them. Do stay alert: you must never cause danger.' } },
+      o: [{ nl: 'Ja, hij komt van rechts', en: 'Yes, they come from the right' }, { nl: 'Nee, voorrang is alleen tussen bestuurders', en: 'No, right of way is only between drivers' }], a: 1,
+      why: { nl: 'Een voetganger is geen bestuurder, dus "rechts gaat voor" geldt niet voor hem. Let wel goed op: je mag nooit gevaar veroorzaken.', en: 'A pedestrian is not a driver, so "right goes first" does not apply to them. Do stay alert: you must never cause danger.' } },
     { id: 'q19', card: 'c7',
       scene: { arms: 'NESW', signs: [{ s: 'B1', p: 'S' }], actors: [{ t: 'car', p: 'S', m: 'straight', me: 1 }] },
       q: { nl: 'Je rijdt langs bord B1. Tot wanneer heb je voorrang?', en: 'You pass sign B1. Until when do you have right of way?' },
       o: [{ nl: 'Tot bord B2', en: 'Until sign B2' }, { nl: 'Alleen op het volgende kruispunt', en: 'Only at the next junction' }], a: 0,
       why: { nl: 'B1 is een voorrangsweg. Die loopt door tot bord B2. Alleen op het volgende kruispunt: dat is B3.', en: 'B1 is a priority road. It continues until sign B2. "Only the next junction" is B3.' } }
   ]
-};
+});

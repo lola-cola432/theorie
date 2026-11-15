@@ -145,21 +145,52 @@
       ${bg}${fg}</svg>`;
   };
 
-  /* Losse borden voor de kaartjes */
-  window.drawSignRow = function (list) {
-    const one = s => {
-      const map = {
-        B1: `<rect x="-20" y="-20" width="40" height="40" transform="rotate(45)" fill="#fff" stroke="#1b1b1b" stroke-width="2"/><rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" fill="#f7c600"/>`,
-        B2: `<rect x="-20" y="-20" width="40" height="40" transform="rotate(45)" fill="#fff" stroke="#1b1b1b" stroke-width="2"/><rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" fill="#f7c600"/><line x1="-22" y1="22" x2="22" y2="-22" stroke="#1b1b1b" stroke-width="5"/>`,
-        B3: `<polygon points="0,-24 25,19 -25,19" fill="#fff" stroke="#d1121b" stroke-width="6" stroke-linejoin="round"/><rect x="-3.5" y="-11" width="7" height="24" fill="#1b1b1b"/><rect x="-12" y="2" width="24" height="3" fill="#1b1b1b"/>`,
-        B4: `<polygon points="0,-24 25,19 -25,19" fill="#fff" stroke="#d1121b" stroke-width="6" stroke-linejoin="round"/><rect x="-3.5" y="-11" width="7" height="24" fill="#1b1b1b"/><rect x="-12" y="2" width="10" height="3" fill="#1b1b1b"/>`,
-        B5: `<polygon points="0,-24 25,19 -25,19" fill="#fff" stroke="#d1121b" stroke-width="6" stroke-linejoin="round"/><rect x="-3.5" y="-11" width="7" height="24" fill="#1b1b1b"/><rect x="2" y="2" width="10" height="3" fill="#1b1b1b"/>`,
-        B6: `<polygon points="-25,-18 25,-18 0,24" fill="#fff" stroke="#d1121b" stroke-width="7" stroke-linejoin="round"/>`,
-        B7: `<polygon points="-10,-24 10,-24 24,-10 24,10 10,24 -10,24 -24,10 -24,-10" fill="#d1121b" stroke="#fff" stroke-width="2.5"/><text x="0" y="5" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">STOP</text>`,
-        H: `<rect x="-26" y="-14" width="52" height="28" fill="#6b6f76" rx="3"/><polygon points="-20,-8 -12,-8 -16,6" fill="#fff"/><polygon points="-6,-8 2,-8 -2,6" fill="#fff"/><polygon points="8,-8 16,-8 12,6" fill="#fff"/>`
-      };
-      return `<figure class="sg"><svg viewBox="-30 -30 60 60" width="64" height="64" aria-hidden="true">${map[s]}</svg><figcaption>${s === 'H' ? '▽▽▽' : s}</figcaption></figure>`;
+  /* Losse borden voor de kaartjes en vragen. Code bv. 'B6', 'A1:50', 'X:rood' */
+  const RING = (inner) => `<circle r="25" fill="#fff" stroke="#d1121b" stroke-width="7"/>${inner || ''}`;
+  const BLUE = '#1356a8';
+  const TRI = (inner) => `<polygon points="0,-24 25,19 -25,19" fill="#fff" stroke="#d1121b" stroke-width="6" stroke-linejoin="round"/>${inner || ''}`;
+  const SQ = (inner) => `<rect x="-24" y="-24" width="48" height="48" rx="5" fill="${BLUE}" stroke="#fff" stroke-width="2"/>${inner || ''}`;
+  const carIcon = (x, c) => `<g transform="translate(${x},0)"><rect x="-8" y="-3" width="16" height="9" rx="2" fill="${c}"/><rect x="-5" y="-9" width="10" height="7" rx="2" fill="${c}"/></g>`;
+  function signSvg(code) {
+    const [k, arg] = code.split(':');
+    const M = {
+      B1: `<rect x="-20" y="-20" width="40" height="40" transform="rotate(45)" fill="#fff" stroke="#1b1b1b" stroke-width="2"/><rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" fill="#f7c600"/>`,
+      B2: `<rect x="-20" y="-20" width="40" height="40" transform="rotate(45)" fill="#fff" stroke="#1b1b1b" stroke-width="2"/><rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" fill="#f7c600"/><line x1="-22" y1="22" x2="22" y2="-22" stroke="#1b1b1b" stroke-width="5"/>`,
+      B3: TRI(`<rect x="-3.5" y="-11" width="7" height="24" fill="#1b1b1b"/><rect x="-12" y="2" width="24" height="3" fill="#1b1b1b"/>`),
+      B4: TRI(`<rect x="-3.5" y="-11" width="7" height="24" fill="#1b1b1b"/><rect x="-12" y="2" width="10" height="3" fill="#1b1b1b"/>`),
+      B5: TRI(`<rect x="-3.5" y="-11" width="7" height="24" fill="#1b1b1b"/><rect x="2" y="2" width="10" height="3" fill="#1b1b1b"/>`),
+      B6: `<polygon points="-25,-18 25,-18 0,24" fill="#fff" stroke="#d1121b" stroke-width="7" stroke-linejoin="round"/>`,
+      B7: `<polygon points="-10,-24 10,-24 24,-10 24,10 10,24 -10,24 -24,10 -24,-10" fill="#d1121b" stroke="#fff" stroke-width="2.5"/><text x="0" y="5" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">STOP</text>`,
+      H: `<rect x="-26" y="-14" width="52" height="28" fill="#6b6f76" rx="3"/><polygon points="-20,-8 -12,-8 -16,6" fill="#fff"/><polygon points="-6,-8 2,-8 -2,6" fill="#fff"/><polygon points="8,-8 16,-8 12,6" fill="#fff"/>`,
+      A1: RING(`<text x="0" y="8" text-anchor="middle" font-size="${(arg || '50').length > 2 ? 19 : 23}" font-weight="800" fill="#1b1b1b">${arg || '50'}</text>`),
+      C1: RING(),
+      C2: `<circle r="27" fill="#d1121b" stroke="#fff" stroke-width="2"/><rect x="-18" y="-5" width="36" height="10" fill="#fff"/>`,
+      C3: SQ(`<path d="M0,-17 L11,-3 H4 V17 H-4 V-3 H-11 Z" fill="#fff"/>`),
+      D1: `<circle r="27" fill="${BLUE}" stroke="#fff" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="5">` +
+          [0, 120, 240].map(a => `<path transform="rotate(${a})" d="M-4.5,-14.3 A15,15 0 0 0 -14.6,3.4"/>`).join('') + `</g>` +
+          [0, 120, 240].map(a => `<polygon transform="rotate(${a})" points="-21,1 -8,2 -15,11" fill="#fff"/>`).join(''),
+      E1: `<circle r="25" fill="${BLUE}" stroke="#d1121b" stroke-width="7"/><line x1="-17" y1="-17" x2="17" y2="17" stroke="#d1121b" stroke-width="7"/>`,
+      E2: `<circle r="25" fill="${BLUE}" stroke="#d1121b" stroke-width="7"/><line x1="-17" y1="-17" x2="17" y2="17" stroke="#d1121b" stroke-width="7"/><line x1="17" y1="-17" x2="-17" y2="17" stroke="#d1121b" stroke-width="7"/>`,
+      E4: SQ(`<text x="0" y="13" text-anchor="middle" font-size="36" font-weight="800" fill="#fff">P</text>`),
+      F1: RING(carIcon(-9, '#d1121b') + carIcon(9, '#1b1b1b')),
+      F5: RING(`<path d="M-8,14 L-15,3 H-11 V-14 H-5 V3 H-1 Z" fill="#1b1b1b"/><path d="M8,-14 L15,-3 H11 V14 H5 V-3 H1 Z" fill="#d1121b"/>`),
+      F6: SQ(`<path d="M-9,13 L-15,4 H-11.500 V-13 H-6.500 V4 H-3 Z" fill="#d1121b"/><path d="M8,-17 L17,-4 H12 V17 H4 V-4 H-1 Z" fill="#fff"/>`),
+      G1: SQ(`<path d="M-10,19 L-4,-8 H-1.500 L-3,19 Z M10,19 L4,-8 H1.500 L3,19 Z" fill="#fff"/><rect x="-18" y="-13" width="36" height="5" fill="#fff"/><rect x="-18" y="-8" width="3" height="6" fill="#fff"/><rect x="15" y="-8" width="3" height="6" fill="#fff"/>`),
+      G3: SQ(`<rect x="-15" y="-2" width="30" height="11" rx="3" fill="#fff"/><path d="M-10,-2 L-7,-11 H7 L10,-2 Z" fill="#fff"/><rect x="-13" y="9" width="6" height="6" fill="#fff"/><rect x="7" y="9" width="6" height="6" fill="#fff"/>`),
+      G11: `<circle r="27" fill="${BLUE}" stroke="#fff" stroke-width="2"/><g fill="none" stroke="#fff" stroke-width="2.600"><circle cx="-11" cy="6" r="7.500"/><circle cx="11" cy="6" r="7.500"/><path d="M-11,6 L-4,-6 H7 L11,6 M-4,-6 L2,6 H-11 M7,-6 L5,-11 H10 M-7,-9 H-1"/></g>`,
+      H1: `<rect x="-28" y="-15" width="56" height="30" rx="3" fill="${BLUE}" stroke="#fff" stroke-width="2"/><text x="0" y="5" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">Leek</text>`,
+      J: TRI(`<rect x="-2.500" y="-9" width="5" height="15" fill="#1b1b1b"/><circle cx="0" cy="11" r="3" fill="#1b1b1b"/>`),
+      X: `<rect x="-22" y="-22" width="44" height="44" rx="5" fill="#1b1b1b"/>` + (arg === 'groen'
+          ? `<path d="M0,16 L-12,0 H-5 V-16 H5 V0 H12 Z" fill="#21b14b"/>`
+          : `<path d="M-13,-13 L13,13 M13,-13 L-13,13" stroke="#e3241b" stroke-width="7" stroke-linecap="round"/>`),
+      L: (() => { const on = c => arg === c; return `<rect x="-11" y="-27" width="22" height="54" rx="6" fill="#1b1b1b"/><circle cy="-16" r="6.500" fill="${on('rood') ? '#e3241b' : '#3a3a3a'}"/><circle cy="0" r="6.500" fill="${on('geel') ? '#f6a400' : '#3a3a3a'}"/><circle cy="16" r="6.500" fill="${on('groen') ? '#21b14b' : '#3a3a3a'}"/>`; })()
     };
+    return M[k] || '';
+  }
+  const CAP = { H: '▽▽▽', X: '', L: '', J: 'J37', H1: 'H1' };
+  window.drawSignRow = function (list) {
+    const one = code => { const k = code.split(':')[0];
+      return `<figure class="sg"><svg viewBox="-30 -30 60 60" width="64" height="64" aria-hidden="true">${signSvg(code)}</svg><figcaption>${k in CAP ? CAP[k] : k}</figcaption></figure>`; };
     return `<div class="signrow">${list.map(one).join('')}</div>`;
   };
 })();
