@@ -37,7 +37,7 @@ window.TOPICS.push({
       ['<b>Red</b>: stop.', '<b>Yellow</b> (amber): stop. Only if you are already so close that stopping is no longer safe, you drive on.', '<b>Green</b>: you may go.', '<b>Flashing yellow</b>: dangerous spot. Be extra careful.'],
       'Geel is geen "snel nog even". Het geeft je tijd om veilig te stoppen voordat het kruisende verkeer groen krijgt.',
       'Yellow does not mean "quickly go". It gives you time to stop safely before the crossing traffic gets green.',
-      ['verkeerslicht', 'geel knipperlicht'], 'RVV 1990, art. 68', ['L:rood', 'L:geel', 'L:groen']),
+      ['verkeerslicht', 'geel knipperlicht'], 'RVV 1990, art. 68 en 75', ['L:rood', 'L:geel', 'L:groen']),
     C('b7', 'Lichten boven de rijstrook', 'Lights above the lane',
       ['<b>Rood kruis</b>: deze rijstrook is dicht. Je mag er niet rijden.', '<b>Groene pijl</b>: deze rijstrook is open.', 'Zo werkt ook een spitsstrook: alleen open bij een groene pijl.'],
       ['<b>Red cross</b>: this lane is closed. You may not drive on it.', '<b>Green arrow</b>: this lane is open.', 'A peak-hour lane works the same way: only open with a green arrow.'],
@@ -49,7 +49,19 @@ window.TOPICS.push({
       ['<b>Solid line</b>: you may not cross it.', 'A solid and a broken line side by side? You may only cross if the broken line is on your side.', '<b>Hatched area</b> (diagonal stripes): do not drive over it.', '<b>Solid yellow line</b>: no stopping. <b>Broken yellow line</b>: no parking.'],
       'Strepen werken als borden op de grond. Een dichte streep is een muur: daarachter is het niet veilig om te komen.',
       'Lines work like signs on the ground. A solid line is a wall: it is not safe to go beyond it.',
-      ['doorgetrokken streep', 'verdrijvingsvlak'], 'RVV 1990, art. 23, 24, 76 en 77')
+      ['doorgetrokken streep', 'verdrijvingsvlak'], 'RVV 1990, art. 23, 24, 76 en 77'),
+    C('b9', 'Zone en onderbord', 'Zone signs and plates below a sign',
+      ['Staat er <b>ZONE</b> op een bord? Dan geldt het bord in het hele gebied, tot het bord "einde zone".', 'Een <b>onderbord</b> hangt onder een bord en geeft extra uitleg.', 'Staat er "uitgezonderd" op? Dan geldt het bord niet voor wie daar wordt genoemd.'],
+      ['Does a sign say <b>ZONE</b>? Then it applies in the whole area, until the "end of zone" sign.', 'A <b>plate below a sign</b> gives extra explanation.', 'Does it say "uitgezonderd" (except)? Then the sign does not apply to whoever is named there.'],
+      'Zo hoeft er niet in elke straat opnieuw een bord te staan. Je moet dus onthouden dat je in een zone rijdt.',
+      'This way a sign does not have to be repeated in every street. So you must remember that you are driving in a zone.',
+      ['zone', 'onderbord', 'uitgezonderd'], 'RVV 1990, art. 66 en 67', ['Z30']),
+    C('b10', 'Busstrook', 'Bus lane',
+      ['Staat er <b>BUS</b> of <b>LIJNBUS</b> op de weg? Dan is die strook niet voor jou.', 'Je mag er niet op rijden en er niet op stilstaan.'],
+      ['Does the road say <b>BUS</b> or <b>LIJNBUS</b>? Then that lane is not for you.', 'You may not drive on it or stop on it.'],
+      'De bus moet door kunnen rijden, ook als het verkeer ernaast vaststaat.',
+      'The bus must be able to keep moving, even when the traffic next to it is stuck.',
+      ['busstrook', 'lijnbus'], 'RVV 1990, art. 23 en 81')
   ],
   questions: [
     Q('bq1', 'b1', 'Dit bord is rond met een rode rand. Wat voor bord is het?', 'This sign is round with a red border. What kind of sign is it?', [['Een verbod', 'A ban'], ['Een gebod', 'An order'], ['Een waarschuwing', 'A warning']], 0, 'Rond met een rode rand is een verbodsbord. Dit bord verbiedt harder rijden dan 50 km/h.', 'Round with a red border is a ban. This sign bans driving faster than 50 km/h.', ['A1:50']),
@@ -62,6 +74,9 @@ window.TOPICS.push({
     Q('bq8', 'b7', 'Boven jouw rijstrook staat een rood kruis. Wat betekent dat?', 'There is a red cross above your lane. What does it mean?', [['Ik mag deze rijstrook niet gebruiken', 'I may not use this lane'], ['Ik moet langzamer rijden', 'I must slow down']], 0, 'Een rood kruis betekent: rijstrook dicht. Ga op tijd en veilig naar een open rijstrook.', 'A red cross means: lane closed. Move to an open lane in good time and safely.', ['X:rood']),
     Q('bq9', 'b8', 'Naast je ligt een doorgetrokken streep. Aan de andere kant ligt een onderbroken streep. Mag jij oversteken?', 'Next to you is a solid line. On the other side of it is a broken line. May you cross?', [['Ja', 'Yes'], ['Nee', 'No']], 1, 'Je mag alleen oversteken als de onderbroken streep aan jouw kant ligt. Aan jouw kant ligt de doorgetrokken streep.', 'You may only cross if the broken line is on your side. On your side is the solid line.'),
     Q('bq10', 'b8', 'Langs de stoeprand ligt een gele onderbroken streep. Wat mag hier niet?', 'Along the kerb there is a broken yellow line. What is not allowed here?', [['Parkeren', 'Parking'], ['Stilstaan', 'Stopping'], ['Rijden', 'Driving']], 0, 'Geel onderbroken: niet parkeren. Geel doorgetrokken: ook niet stilstaan.', 'Broken yellow: no parking. Solid yellow: no stopping either.'),
+    Q('bq12', 'b9', 'Je rijdt dit bord voorbij en slaat daarna twee keer af. Er staan geen borden meer. Hoe hard mag je?', 'You pass this sign and then turn twice. There are no more signs. How fast may you drive?', [['30 km/h', '30 km/h'], ['50 km/h', '50 km/h']], 0, 'Een zonebord geldt in het hele gebied, tot het bord "einde zone".', 'A zone sign applies in the whole area, until the "end of zone" sign.', ['Z30']),
+    Q('bq13', 'b9', 'Onder een bord "gesloten voor alle voertuigen" hangt een onderbord: "uitgezonderd bestemmingsverkeer". Je moet in deze straat zijn. Mag je erin?', 'Below a sign "closed to all vehicles" hangs a plate: "uitgezonderd bestemmingsverkeer" (except for access). Your destination is in this street. May you enter?', [['Ja', 'Yes'], ['Nee', 'No']], 0, '"Uitgezonderd" betekent: het bord geldt niet voor wie wordt genoemd. Jij hebt je bestemming in deze straat.', '"Uitgezonderd" means: the sign does not apply to whoever is named. Your destination is in this street.', ['C1']),
+    Q('bq14', 'b10', 'Op de rijstrook naast je staat LIJNBUS. Het verkeer op jouw strook staat vast. Mag je over de busstrook rijden?', 'The lane next to you says LIJNBUS. Traffic in your lane is stuck. May you drive along the bus lane?', [['Nee', 'No'], ['Ja', 'Yes']], 0, 'Een busstrook is alleen voor lijnbussen en trams.', 'A bus lane is only for scheduled buses and trams.'),
     Q('bq11', 'b3', 'Wat betekent dit bord?', 'What does this sign mean?', [['Rotonde: volg de pijlen', 'Roundabout: follow the arrows'], ['Keren verplicht', 'You must turn around']], 0, 'Bord D1 is een rotonde. Je rijdt in de richting van de pijlen: tegen de klok in.', 'Sign D1 is a roundabout. You drive in the direction of the arrows: anticlockwise.', ['D1'])
   ]
 });

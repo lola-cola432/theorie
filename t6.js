@@ -51,11 +51,23 @@ window.TOPICS.push({
       'The procession belongs together and must stay together. Out of respect, and to avoid confusion.',
       ['militaire colonne', 'uitvaartstoet'], 'RVV 1990, art. 16'),
     C('w9', 'Pech onderweg', 'Breaking down',
-      ['Zet je auto zo ver mogelijk aan de kant en doe je <b>alarmlichten</b> aan.', 'Werken die niet? Zet dan een <b>gevarendriehoek</b> neer.', 'Op de snelweg: stap uit aan de kant van de berm en ga achter de vangrail staan.'],
-      ['Move your car as far to the side as possible and switch on your <b>hazard lights</b>.', 'Not working? Then put out a <b>warning triangle</b>.', 'On the motorway: get out on the verge side and stand behind the crash barrier.'],
+      ['Zet je auto zo ver mogelijk aan de kant en doe je <b>alarmlichten</b> aan.', 'Werken die niet? Zet dan een <b>gevarendriehoek</b> neer, ongeveer <b>30 meter</b> achter je auto.', 'Op de snelweg: stap uit aan de kant van de berm en ga achter de vangrail staan.'],
+      ['Move your car as far to the side as possible and switch on your <b>hazard lights</b>.', 'Not working? Then put out a <b>warning triangle</b>, about <b>30 metres</b> behind your car.', 'On the motorway: get out on the verge side and stand behind the crash barrier.'],
       'Een stilstaande auto is een verrassing voor wie hard aan komt rijden. Hoe eerder ze je zien, hoe veiliger.',
       'A stationary car is a surprise for someone approaching fast. The sooner they see you, the safer.',
-      ['alarmlichten', 'gevarendriehoek', 'vangrail'], 'RVV 1990, art. 58')
+      ['alarmlichten', 'gevarendriehoek', 'vangrail'], 'RVV 1990, art. 58'),
+    C('w10', 'Tram of bus bij de halte', 'Tram or bus at the stop',
+      ['Staat een tram of bus bij de halte en rijd jij langs de kant waar mensen in- en uitstappen?', 'Dan geef je die mensen de ruimte om in en uit te stappen.'],
+      ['Is a tram or bus at the stop and are you passing on the side where people get on and off?', 'Then you give those people room to get on and off.'],
+      'Reizigers stappen soms midden op straat uit, bijvoorbeeld bij een tram. Ze letten op de tram, niet op jou.',
+      'Passengers sometimes step out into the middle of the street, for example from a tram. They are watching the tram, not you.',
+      ['tramhalte', 'in- en uitstappen'], 'RVV 1990, art. 52'),
+    C('w11', 'Slepen en meerijden', 'Towing and passengers',
+      ['<b>Slepen</b>: de afstand tussen de twee auto\'s mag niet groter zijn dan <b>5 meter</b>.', 'Er mogen <b>geen mensen meerijden</b> in een aanhanger, een caravan of de laadruimte.', 'In een auto die gesleept wordt, mag wel iemand achter het stuur zitten.'],
+      ['<b>Towing</b>: the gap between the two cars may not be more than <b>5 metres</b>.', '<b>No people may ride</b> in a trailer, a caravan or the load space.', 'In a car that is being towed, someone may sit behind the wheel.'],
+      'Met een lange sleepkabel kan iemand er tussendoor willen. En in een aanhanger of caravan zit je zonder gordel en zonder bescherming.',
+      'With a long tow rope someone may try to cut in between. And in a trailer or caravan you sit without a belt and without protection.',
+      ['slepen', 'aanhangwagen', 'laadruimte'], 'RVV 1990, art. 53 en 61b')
   ],
   questions: [
     Q('wq1', 'w1', 'Je hebt op de snelweg je uitrit gemist. Wat doe je?', 'You have missed your exit on the motorway. What do you do?', [['Ik rijd door naar de volgende uitrit', 'I drive on to the next exit'], ['Ik rijd achteruit over de vluchtstrook', 'I reverse along the hard shoulder']], 0, 'Op de snelweg mag je niet keren en niet achteruitrijden. Ook niet op de vluchtstrook.', 'On the motorway you may not turn around or reverse. Not on the hard shoulder either.'),
@@ -68,6 +80,8 @@ window.TOPICS.push({
     Q('wq8', 'w6', 'Binnen de bebouwde kom geeft een bus richting aan om van de halte weg te rijden. Wat doe je?', 'Inside a built-up area a bus indicates to pull away from the stop. What do you do?', [['Ik geef de bus de ruimte', 'I give the bus room'], ['Ik rijd door, de bus moet wachten', 'I drive on, the bus must wait']], 0, 'Binnen de bebouwde kom moet je een bus de gelegenheid geven om weg te rijden.', 'Inside built-up areas you must give a bus the chance to pull away.'),
     Q('wq9', 'w7', 'Een man met een witte stok met rode ringen wil oversteken. Er is geen zebrapad. Wat doe je?', 'A man with a white stick with red rings wants to cross. There is no zebra crossing. What do you do?', [['Ik laat hem voor gaan', 'I let him go first'], ['Ik rijd door, er is geen zebrapad', 'I drive on, there is no zebra crossing']], 0, 'Blinden met een witte stok met rode ringen laat je altijd voor gaan. Ook zonder zebrapad.', 'You always let blind people with a white stick with red rings go first. Even without a zebra crossing.'),
     Q('wq10', 'w8', 'Van links komt een uitvaartstoet van auto\'s. Jij komt van rechts. Mag je er tussendoor rijden?', 'A funeral procession of cars comes from the left. You come from the right. May you drive in between?', [['Nee', 'No'], ['Ja, ik kom van rechts', 'Yes, I come from the right']], 0, 'Een uitvaartstoet van motorvoertuigen mag je niet doorsnijden.', 'You may not cut through a funeral procession of motor vehicles.'),
+    Q('wq12', 'w10', 'Een tram staat bij een halte midden op straat. Mensen stappen uit aan jouw kant. Wat doe je?', 'A tram is at a stop in the middle of the street. People are getting off on your side. What do you do?', [['Ik geef ze de ruimte om uit te stappen', 'I give them room to get off'], ['Ik rijd door, zij moeten wachten', 'I drive on, they must wait']], 0, 'Reizigers die in- of uitstappen bij een tram of bus geef je de gelegenheid daartoe.', 'You give passengers getting on or off a tram or bus the chance to do so.'),
+    Q('wq13', 'w11', 'Mag er tijdens het rijden iemand in de caravan zitten?', 'May someone sit in the caravan while you are driving?', [['Nee', 'No'], ['Ja, als hij een gordel om heeft', 'Yes, if they wear a seat belt']], 0, 'In een aanhanger of caravan mogen geen mensen meerijden.', 'No people may ride in a trailer or caravan.'),
     Q('wq11', 'w9', 'Je krijgt pech op de snelweg en staat op de vluchtstrook. Waar wacht je?', 'You break down on the motorway and are on the hard shoulder. Where do you wait?', [['Achter de vangrail', 'Behind the crash barrier'], ['In de auto', 'In the car']], 0, 'Achter de vangrail ben je het veiligst. Stap uit aan de kant van de berm.', 'You are safest behind the crash barrier. Get out on the verge side.')
   ]
 });
